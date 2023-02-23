@@ -12,4 +12,16 @@ body {
     z-index: -9999;
   }
 
+  .card {
   
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.074);
+    box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.25);
+  
+    backdrop-filter: blur(3px);
+  }
+
+  .container {
+    max-width: 70% !important;
+ }
