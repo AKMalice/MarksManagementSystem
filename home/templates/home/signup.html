@@ -6,28 +6,43 @@
     
 
     <div class="row  justify-content-center align-items-center">
-        {%load static%}
-        <div class="col"> <img src="{%static '../static/images/lgimg.png'%}"
-            class="img-fluid" alt="Sample image"></div>
+      {%load static%}
+      <div class="col"> <img src="{%static '../static/images/signup2.png'%}"
+          class="img-fluid" alt="Sample image"></div>
       <div class="col-12 col-md-8 col-lg-6 col-xl-5">
         <div class=" text-white" >
           <div class=" p-5 text-center">
 
             <div class="mb-md-5 mt-md-4 pb-3">
 
-              <h2 class="display-6 mb-5 text-uppercase">Sign Up</h2>
+              <h1 class="text-uppercase">Sign Up</h1>
+            
 
               <div class="form-outline form-white p-2">
-                <input type="email" placeholder="Username" class="form-control form-control-lg" />
+                <input type="text" placeholder="University" class="form-control form-control-lg" />
+              </div>
+
+              <div class="form-outline form-white p-2">
+                <input type="email" placeholder="Email" class="form-control form-control-lg" />
+              </div>
+
+              <div class="form-outline form-white p-2">
+                <input type="text" placeholder="Username" class="form-control form-control-lg" />
               </div>
 
               <div class="form-outline form-white p-2">
                 <input type="password" placeholder="Password" class="form-control form-control-lg" />
               </div>
 
-              <p class="small mt-3 pb-lg-2"><a class="text-white" href="#!">Forgot password?</a></p>
+              <div class="form-outline form-white p-2">
+                <input type="password" placeholder="Confirm Password" class="form-control form-control-lg" />
+              </div>
+               <br/>
+              
 
-              <button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
+              
+
+              <button class="btn btn-outline-light btn-lg px-5" type="submit">Sign Up</button>
 
             </div>
 
