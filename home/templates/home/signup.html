@@ -2,7 +2,16 @@
 
 {% block content %}
 
-<div class="card container mt-5 my-4 text-center">
+{% if error != None %}
+<div class="alert alert-danger alert-dismissible">
+  <a href="" class="close text-decoration-none text-dark p-2" data-dismiss="alert" aria-label="close">&times;</a>
+  <strong>Error</strong> {{error}}
+</div>
+{%endif%}
+
+<form action = "" method = "POST">
+  {% csrf_token %}
+<div class="card container  my-4 text-center">
     
 
     <div class="row  justify-content-center align-items-center">
@@ -19,23 +28,23 @@
             
 
               <div class="form-outline form-white p-2">
-                <input type="text" placeholder="University" class="form-control form-control-lg" />
+                <input type="text" placeholder="University Name" class="form-control form-control-lg" name="university_name" />
               </div>
 
               <div class="form-outline form-white p-2">
-                <input type="email" placeholder="Email" class="form-control form-control-lg" />
+                <input type="email" placeholder="Email" class="form-control form-control-lg" name="email" />
               </div>
 
               <div class="form-outline form-white p-2">
-                <input type="text" placeholder="Username" class="form-control form-control-lg" />
+                <input type="text" placeholder="Username" class="form-control form-control-lg" name="username" />
               </div>
 
               <div class="form-outline form-white p-2">
-                <input type="password" placeholder="Password" class="form-control form-control-lg" />
+                <input type="password" placeholder="Password" class="form-control form-control-lg" name="password"/>
               </div>
 
               <div class="form-outline form-white p-2">
-                <input type="password" placeholder="Confirm Password" class="form-control form-control-lg" />
+                <input type="password" placeholder="Confirm Password" class="form-control form-control-lg" name="confirm_password"/>
               </div>
                <br/>
               
@@ -57,5 +66,7 @@
     </div>
     
   </div>
+
+</form>
 
 {% endblock %}

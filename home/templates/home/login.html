@@ -2,6 +2,23 @@
 
 {% block content %}
 
+{% if registered != None%}
+<div class="alert alert-info alert-dismissible">
+  <a href="/login" class="close text-decoration-none text-dark p-2" data-dismiss="alert" aria-label="close">&times;</a>
+  <strong>{{registered}}</strong> Please Sign In To Continue
+</div>
+{%endif%}
+
+{% if error != None%}
+<div class="alert alert-danger alert-dismissible">
+  <a href="/login" class="close text-decoration-none text-dark p-2" data-dismiss="alert" aria-label="close">&times;</a>
+  <strong>{{error}}</strong> 
+</div>
+{%endif%}
+
+<form action = "" method = "POST">
+  {% csrf_token %}
+
 <div class="card container mt-5 my-4 text-center">
     
 
@@ -18,11 +35,11 @@
               <h2 class="display-6 mb-5 text-uppercase">Login</h2>
 
               <div class="form-outline form-white p-2">
-                <input type="email" placeholder="Username" class="form-control form-control-lg" />
+                <input type="text" placeholder="Username" class="form-control form-control-lg" name="username"/>
               </div>
 
               <div class="form-outline form-white p-2">
-                <input type="password" placeholder="Password" class="form-control form-control-lg" />
+                <input type="password" placeholder="Password" class="form-control form-control-lg" name="password"/>
               </div>
              
                <p class="small mt-3 pb-lg-2"><a class="text-white" href="#!">Forgot password?</a></p>
@@ -47,5 +64,7 @@
     </div>
     
   </div>
+
+  </form>
 
 {% endblock %}

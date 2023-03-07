@@ -17,10 +17,12 @@ from django.contrib import admin
 from django.urls import path
 
 from home import views as homeviews
+from dashboard import views as dashboardviews
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',homeviews.home,name="home-page"),
     path('login',homeviews.login,name="login"),
-    path('signup',homeviews.signup,name="signup")
+    path('signup',homeviews.signup,name="signup"),
+    path('admin_dashboard',dashboardviews.admin_dashboard,name="admin_dash")
 ]
