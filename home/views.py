@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.db.models import Q
 from dashboard.models import Admin
 from django.shortcuts import redirect
-from dashboard.views import admin_dashboard
+from dashboard.views import dashboard
 
 def home(request):
     return render(request,'home/homepage.html',{})
@@ -16,7 +16,8 @@ def login(request):
             if queryset[0].password == data.get("password"):
                 request.session['username'] = queryset[0].username
                 request.session['uni_name'] = queryset[0].uni_name
-                return redirect(admin_dashboard)
+                request.session['user']='admin'
+                return redirect(dashboard)
             else:
                 return render(request,'home/login.html',{"error": "Invalid Password"})
         else:
@@ -48,6 +49,8 @@ def signup(request):
                 return render(request,'home/signup.html',{'error':": University Name Already Exists"})
             elif "username" in e:
                 return render(request,'home/signup.html',{'error':": Username Already Exists"})
+            elif "email" in e:
+                return render(request,'home/signup.html',{'error':": Email Already Exists"})
             else:
                 return render(request,'home/signup.html',{'error':": An Unkown Error Occurred"})
 

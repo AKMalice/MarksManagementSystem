@@ -1,7 +1,116 @@
 {%extends "dash_base.html"%}
 
 {%block content%}
-<h1 class="text-center p-5 ">DASHBOARD</h1>
-<p class="text-center text-uppercase">{{uni_name}}</p>
+
+<!--Navbar-->
+<div class=" navbox container rounded mt-3">
+<nav class="navbar navbar-expand-lg row">
+  <div class="container-fluid">
+    <a class="navbar-brand text-light col text-uppercase display-5 p-2" href="">{{uni_name}}</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav col">
+        <li class="nav-item px-2">
+          <a class="nav-link text-light text-uppercase"  href="/dashboard">Dashboard</a>
+        </li>
+        <li class="nav-item px-2">
+          <a class="nav-link text-light text-uppercase" href="">Analytics</a>
+        </li>
+        <li class="nav-item px-2">
+          <a class="nav-link text-light text-uppercase" href="{% url 'faculty' %}">Faculty</a>
+        </li>
+        <li class="nav-item px-2">
+          <a class="nav-link text-light text-uppercase" href="">Students</a>
+        </li>
+        <li class="nav-item px-2">
+          <a class="nav-link text-light text-uppercase" href="">Issues</a>
+        </li>
+        <li class="nav-item px-2">
+          <a class="nav-link text-light text-uppercase" href="">View Marks</a>
+        </li>
+      </ul>
+      <a class="btn btn-outline-light btn-sm " href="{%url 'logout'%}">
+        Logout
+      </a>
+    </div>
+  </div>
+</nav>
+</div>
+
+{% if success != None%}
+<div class="alert alert-info alert-dismissible mt-3 container">
+  <a href="/dashboard" class="close text-decoration-none text-dark p-2" data-dismiss="alert" aria-label="close">&times;</a>
+  <strong>{{success}}</strong>
+</div>
+{%endif%}
+
+{% if error != None%}
+<div class="alert alert-danger alert-dismissible mt-3 container">
+  <a href="/dashboard" class="close text-decoration-none text-dark p-2" data-dismiss="alert" aria-label="close">&times;</a>
+  <strong>{{error}}</strong> 
+</div>
+{%endif%}
+
+<form action = "" method = "POST">
+  {% csrf_token %}
+
+<!--Raised Issues & Announcement Form-->
+<div class="container mt-5">
+  <div class="row ">
+    <div class="col">
+     <div class="p-5 border rounded shadow">
+      <div class=" row ">
+        <h1 class="col display-6">Issues Raised</h1>
+        <h1 class="col display-6">Recent Activity</h1>
+      </div>
+      <div class="row mb-1">
+        <h1 class=" col display-2">0</h1>
+        <h1 class=" col display-2">---</h1>
+      </div>
+
+     </div>
+    </div>
+    <div class="col">
+      <div class="px-5 border rounded shadow  ">
+
+        <div class="row mt-4 ">
+          <textarea class="form-control mt-2 " id="textArea" rows="5" placeholder="Make An Announcement ..." name = "note"></textarea>
+        </div>
+        <div class="mt-2 mb-2 col-8 offset-2 d-grid text-center">
+            <button class="btn btn btn-dark m-3" type="submit">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</form>
+
+<!--List of Announcements-->
+{% if announcementList %}
+
+{%for announcement in announcementList%}
+<div class="container mt-4 mb-3">
+  <div class="border rounded shadow px-4 py-3">
+    <h5 class="text-left  text-uppercase"> {{uni_name}} Admin</h5>
+    <hr />
+    <h3>{{announcement.note}}</h3>
+    <p class="fw-light">{{announcement.time}}</p>
+  </div>
+</div>
+{%endfor%}
+
+{% else %}
+<div class="container mt-4 mb-3">
+  <div class="border rounded shadow px-4 py-3">
+    <h5 class="text-center fw-light  text-uppercase"> No Recent Announcements</h5>
+  </div>
+</div>
+
+{%endif%}
+
+
 
 {%endblock%}

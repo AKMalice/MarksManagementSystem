@@ -1,0 +1,129 @@
+{%extends "dash_base.html"%}
+
+{%block content%}
+
+<!--Navbar-->
+<div class=" navbox container rounded mt-3">
+    <nav class="navbar navbar-expand-lg row">
+      <div class="container-fluid">
+        <a class="navbar-brand text-light col text-uppercase display-5 p-2" href="">{{uni_name}}</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav col">
+            <li class="nav-item px-2">
+              <a class="nav-link text-light text-uppercase"  href="/dashboard">Dashboard</a>
+            </li>
+            <li class="nav-item px-2">
+              <a class="nav-link text-light text-uppercase" href="">Analytics</a>
+            </li>
+            <li class="nav-item px-2">
+              <a class="nav-link text-light text-uppercase" href="{% url 'faculty' %}">Faculty</a>
+            </li>
+            <li class="nav-item px-2">
+              <a class="nav-link text-light text-uppercase" href="">Students</a>
+            </li>
+            <li class="nav-item px-2">
+              <a class="nav-link text-light text-uppercase" href="">Issues</a>
+            </li>
+            <li class="nav-item px-2">
+              <a class="nav-link text-light text-uppercase" href="">View Marks</a>
+            </li>
+          </ul>
+          <a class="btn btn-outline-light btn-sm " href="{%url 'logout'%}">
+            Logout
+          </a>
+        </div>
+      </div>
+    </nav>
+    </div>
+
+{% if success != None%}
+<div class="alert alert-info alert-dismissible mt-3 container">
+  <a href="/faculty" class="close text-decoration-none text-dark p-2" data-dismiss="alert" aria-label="close">&times;</a>
+  <strong>{{success}}</strong>
+</div>
+{%endif%}
+
+{% if error != None%}
+<div class="alert alert-danger alert-dismissible mt-3 container">
+  <a href="/faculty" class="close text-decoration-none text-dark p-2" data-dismiss="alert" aria-label="close">&times;</a>
+  <strong>{{error}}</strong> 
+</div>
+{%endif%}
+
+<!--Faculty Count & Add Faculty Form-->
+<form action = "" method = "POST">
+    {% csrf_token %}
+<div class="container mt-5">
+    <div class="row ">
+      <div class="col-4">
+       <div class="p-3 border rounded shadow">
+        <div class=" row ">
+          <h3 class="col fw-light">Faculty Count</h3>
+          <h3 class="col fw-light">Course Count</h3>
+        </div>
+        <div class="row ">
+          <h1 class=" col display-2">{{facultyListLength}}</h1>
+          <h1 class=" col display-2">0</h1>
+        </div>
+  
+       </div>
+      </div>
+      <div class="col">
+        <div class="px-5 border rounded shadow  ">
+          <div class="row my-3 ">
+            <h4 class="fw-light text-center text-uppercase">Add Faculty</h4>
+            <div class="row auto">
+
+           <div class="col-4 mt-2 mb-2">
+            <input class="form-control px-3 mb-2" type="text" placeholder="Teacher ID" name = "teacher_id"></input>
+            <input class="form-control px-3" type="text" placeholder="Username" name = "teacher_username"></input>
+           </div>
+
+           <div class="col-4 mt-2">
+            <input class="form-control px-3 mb-2" type="text" placeholder="Name" name = "name"></input>
+            <input class="form-control   px-3" type="text" placeholder="Password" name = "password"></input>
+           </div>
+
+           <div class="col-4 mt-2">
+            <input class="form-control px-3 mb-2" type="email" placeholder="Email" name = "email"></input>
+            <button class="col-12 btn btn-dark " type="submit"> Add </button>
+           </div>
+
+        </div>
+          </div>
+        
+        </div>
+      </div>
+    </div>
+  </div>
+  </form>
+
+
+  <div class="container mt-4 mb-1">
+    <div class="border rounded shadow px-4 py-3">
+      <div class="row">
+          <h5 class="col-2 fw-bold text-uppercase"> Teacher ID</h5>
+          <h5 class="col-2 fw-bold text-uppercase"> Name</h5>
+          <h5 class="col-2 fw-bold text-uppercase"> Email</h5>
+      </div>
+    </div>
+  </div>
+
+
+<!--List of Faculty-->
+{%for faculty in facultyList%}
+<div class="container mt-3 mb-3">
+  <div class="border rounded shadow px-4 py-3">
+    <div class="row">
+        <h5 class="col-2 fw-light"> {{faculty.teacher_id}}</h5>
+        <h5 class="col-2 fw-light"> {{faculty.name}}</h5>
+        <h5 class="col-2 fw-light"> {{faculty.email}}</h5>
+    </div>
+  </div>
+</div>
+{%endfor%}
+
+{%endblock%}
