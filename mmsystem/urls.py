@@ -26,5 +26,8 @@ urlpatterns = [
     path('signup',homeviews.signup,name="signup"),
     path('dashboard',dashboardviews.dashboard,name="dash"),
     path('logout',dashboardviews.logout,name="logout"),
-    path('faculty',dashboardviews.admin_faculty,name="faculty")
+    path('faculty',dashboardviews.admin_faculty,name="faculty"),
+    path('faculty/<int:id>',dashboardviews.admin_faculty_details,name="faculty-details"),
+    path('faculty/<int:id>/delete/<slug:section>',dashboardviews.admin_faculty_details_delete,name="delete-section"),
+    path('students',dashboardviews.admin_students,name="students")
 ]

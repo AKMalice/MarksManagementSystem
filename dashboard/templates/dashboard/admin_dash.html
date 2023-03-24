@@ -7,7 +7,7 @@
 <nav class="navbar navbar-expand-lg row">
   <div class="container-fluid">
     <a class="navbar-brand text-light col text-uppercase display-5 p-2" href="">{{uni_name}}</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler btn-outline-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
@@ -22,7 +22,7 @@
           <a class="nav-link text-light text-uppercase" href="{% url 'faculty' %}">Faculty</a>
         </li>
         <li class="nav-item px-2">
-          <a class="nav-link text-light text-uppercase" href="">Students</a>
+          <a class="nav-link text-light text-uppercase" href="{% url 'students' %}">Students</a>
         </li>
         <li class="nav-item px-2">
           <a class="nav-link text-light text-uppercase" href="">Issues</a>
@@ -73,7 +73,7 @@
      </div>
     </div>
     <div class="col">
-      <div class="px-5 border rounded shadow  ">
+      <div class="px-5 border rounded shadow ">
 
         <div class="row mt-4 ">
           <textarea class="form-control mt-2 " id="textArea" rows="5" placeholder="Make An Announcement ..." name = "note"></textarea>
