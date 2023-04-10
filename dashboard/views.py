@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
-from dashboard.models import Announcement,Faculty,Section,Student
+from dashboard.models import Announcement,Faculty,Section,Student,Classe
+from django.core.mail import send_mail
 from django.db.models import Q
 
 def dashboard(request):
@@ -59,6 +60,13 @@ def admin_faculty(request):
 
         try:
             newFaculty.save()
+            send_mail(
+                'NOVA Invitation',
+                'You Have Been Invited To Join NOVA You Can Login Using the Following Credentials :\n '+'Username : '+newFaculty.username+'\n'+'Password : '+newFaculty.password,
+                'novamarks123@gmail.com',
+                [newFaculty.email],
+                 fail_silently=False,
+            )
             facultyList = Faculty.objects.filter(Q(admin_username=request.session['username']))
             return render(request,'dashboard/admin_faculty.html',{"uni_name" : request.session['uni_name'] , "success" : "Faculty Added Successfully","facultyList" : facultyList,"facultyListLength" : len(facultyList),"courseCount" : courseCount})
         except Exception as e:
@@ -71,6 +79,7 @@ def admin_faculty(request):
                 return render(request,'dashboard/admin_faculty.html',{"uni_name" : request.session['uni_name'] , "error" : "Username Must Be Unique" ,"facultyList" : facultyList,"facultyListLength" : len(facultyList),"courseCount" : courseCount})
             else:
                 facultyList = Faculty.objects.filter(Q(admin_username=request.session['username']))
+                print(e)
                 return render(request,'dashboard/admin_faculty.html',{"uni_name" : request.session['uni_name'] , "error" : "Something Went Wrong" ,"facultyList" : facultyList,"facultyListLength" : len(facultyList),"courseCount" : courseCount})
 
     elif request.session.has_key('user') and request.session['user'] == 'admin':
@@ -98,18 +107,18 @@ def admin_faculty_details(request,id):
 
         try:
             newSection.save()
-            sectionList = Section.objects.filter(Q(admin_username=request.session['username']) & Q(teacher_id=id))
+            sectionList = Section.objects.filter(Q(admin_username=request.session['username']) & Q(teacher_id=id) & Q(active=True))
             courseCount = sectionList.values('course_id').distinct().count()
             return render(request,'dashboard/admin_faculty_details.html',{"uni_name" : request.session['uni_name'] ,"faculty" : faculty,"success" : "Section Added Successfully", "sectionList" : sectionList, "sectionCount" : len(sectionList), "courseCount" : courseCount})
         except:
-            sectionList = Section.objects.filter(Q(admin_username=request.session['username']) & Q(teacher_id=id))
+            sectionList = Section.objects.filter(Q(admin_username=request.session['username']) & Q(teacher_id=id) & Q(active=True))
             courseCount = sectionList.values('course_id').distinct().count()
             return render(request,'dashboard/admin_faculty_details.html',{"uni_name" : request.session['uni_name'] ,"faculty" : faculty,"error":"Something Went Wrong", "sectionList" : sectionList, "sectionCount" : len(sectionList), "courseCount" : courseCount})
 
     elif request.session.has_key('user') and request.session['user'] == 'admin':
         faculty = Faculty.objects.filter(Q(admin_username=request.session['username']) & Q(teacher_id=id))
         faculty = faculty[0]
-        sectionList = Section.objects.filter(Q(admin_username=request.session['username']) & Q(teacher_id=id))
+        sectionList = Section.objects.filter(Q(admin_username=request.session['username']) & Q(teacher_id=id) &Q(active=True))
         courseCount = sectionList.values('course_id').distinct().count()
         return render(request,'dashboard/admin_faculty_details.html',{"uni_name" : request.session['uni_name'] ,"faculty" : faculty, "sectionList" : sectionList, "sectionCount" : len(sectionList), "courseCount" : courseCount})
     else:
@@ -119,7 +128,7 @@ def admin_faculty_details(request,id):
 def admin_faculty_details_delete(request,id,section):
     if request.session.has_key('user') and request.session['user'] == 'admin':
         try:
-            Section.objects.filter(section_id=section).delete()
+            Section.objects.filter(section_id=section).update(active=False)
             return redirect('faculty-details',id=id)
         except:
             return redirect('faculty-details',id=id)
@@ -141,6 +150,13 @@ def admin_students(request):
 
         try:
             newStudent.save()
+            send_mail(
+                'NOVA Invitation',
+                'You Have Been Invited To Join NOVA You Can Login Using the Following Credentials :\n '+'Username : '+newStudent.username+'\n'+'Password : '+newStudent.password,
+                'novamarks123@gmail.com',
+                [newStudent.email],
+                 fail_silently=False,
+            )
             studentList = Student.objects.filter(Q(admin_username=request.session['username']))
             return render(request,'dashboard/admin_students.html',{"uni_name" : request.session['uni_name'] , "success" : "Student Added Successfully","studentList" : studentList,"studentListLength" : len(studentList),"courseCount" : courseCount})
         except Exception as e:
@@ -162,6 +178,57 @@ def admin_students(request):
     else:
         return redirect('/login')
     
+def admin_student_details(request,id):
+    if request.method == "POST":
+        data = request.POST
+        newClass = Classe()
+
+        newClass.admin_username = request.session['username']
+        newClass.student_id = id
+        newClass.year = data.get('year')
+        newClass.section_id =  (newClass.year + data.get('course_id') + data.get('section_name')).replace(" ","")
+
+        try:
+            newClass.save()
+            student = Student.objects.filter(Q(admin_username=request.session['username']) & Q(student_id=id))
+            student = student[0]
+            classList = Classe.objects.filter(Q(admin_username=request.session['username']) & Q(student_id=id))
+            sectionList = []
+            sectionListComp = []
+            for Class in classList:
+                sectionList.append(Section.objects.filter(Q(admin_username=request.session['username']) & Q(section_id=Class.section_id)))
+            for sec in sectionList:
+                if len(sec)>=1:
+                    sectionListComp.append(sec[0])
+            return render(request,'dashboard/admin_student_details.html',{"uni_name" : request.session['uni_name'] ,"student" : student,"classList" : classList, "courseCount" : len(classList),"sectionList" : sectionListComp,"success": "Section Added Successfully"})
+        except:
+            student = Student.objects.filter(Q(admin_username=request.session['username']) & Q(student_id=id))
+            student = student[0]
+            classList = Classe.objects.filter(Q(admin_username=request.session['username']) & Q(student_id=id))
+            sectionList = []
+            sectionListComp = []
+            for Class in classList:
+                sectionList.append(Section.objects.filter(Q(admin_username=request.session['username']) & Q(section_id=Class.section_id)))
+            for sec in sectionList:
+                if len(sec)>=1:
+                    sectionListComp.append(sec[0])
+            return render(request,'dashboard/admin_student_details.html',{"uni_name" : request.session['uni_name'] ,"student" : student,"classList" : classList, "courseCount" : len(classList),"sectionList" : sectionListComp,"error":"Oops! Something Went Wrong"})
+
+    elif request.session.has_key('user') and request.session['user'] == 'admin':
+        student = Student.objects.filter(Q(admin_username=request.session['username']) & Q(student_id=id))
+        student = student[0]
+        classList = Classe.objects.filter(Q(admin_username=request.session['username']) & Q(student_id=id))
+        sectionList = []
+        sectionListComp = []
+        for Class in classList:
+            sectionList.append(Section.objects.filter(Q(admin_username=request.session['username']) & Q(section_id=Class.section_id)))
+        for sec in sectionList:
+            if len(sec)>=1:
+                sectionListComp.append(sec[0])
+
+        return render(request,'dashboard/admin_student_details.html',{"uni_name" : request.session['uni_name'] ,"student" : student,"classList" : classList, "courseCount" : len(classList),"sectionList" : sectionListComp})
+    else:
+        return redirect('/login')
 
 
 def student_dashboard(request):
