@@ -115,7 +115,6 @@ def admin_faculty_details(request,id):
     else:
         return redirect('/login')
 
-
 def admin_faculty_details_delete(request,id,section):
     if request.session.has_key('user') and request.session['user'] == 'admin':
         try:
