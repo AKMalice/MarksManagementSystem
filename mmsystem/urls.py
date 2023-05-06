@@ -30,5 +30,6 @@ urlpatterns = [
     path('faculty/<int:id>',dashboardviews.admin_faculty_details,name="faculty-details"),
     path('faculty/<int:id>/delete/<slug:section>',dashboardviews.admin_faculty_details_delete,name="delete-section"),
     path('students',dashboardviews.admin_students,name="students"),
-    path('students/<int:id>',dashboardviews.admin_student_details,name="student-details")
+    path('students/<int:id>',dashboardviews.admin_student_details,name="student-details"),
+    path('forgotpassword',homeviews.forgotpassword,name="forgotpassword")
 ]

@@ -2,9 +2,39 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.db.models import Q
 from dashboard.models import Admin
+from dashboard.models import Student
 from django.shortcuts import redirect
 from dashboard.views import dashboard
 import bcrypt
+from django.core.mail import send_mail
+from password_generator import PasswordGenerator
+
+
+def forgotpassword(request):
+    if request.method == "POST":
+        data = request.POST
+        queryset = Student.objects.filter(Q(username=data.get("username")))
+        if len(queryset) == 1:
+            emailAdd = queryset[0].email;
+            password = "1234"
+            user = queryset[0];
+            curusername = user.username
+            pwo = PasswordGenerator()
+            pwo.excludeschars = "[$&+,:;=#|'<>.-^*()%!]" 
+            newPassword=pwo.generate()
+            send_mail(
+            'NOVA RESET PASSWORD',
+            'Here is your new password to NOVA Marks Management System \n' + 'Username : ' + user.username + '\n' + 'New password : ' + newPassword +'\n' + 'Login here : ' + 'https://akmalice.pythonanywhere.com/login',                      
+            'novamarks123@gmail.com',
+            [emailAdd],
+            fail_silently=False,
+            )
+            Student.objects.filter(username = curusername).update(password = newPassword)
+            return render(request,'home/forgotpassword.html',{"success" : "Email has been sent"})
+        else:
+            return render(request,'home/forgotpassword.html',{"error": "Invalid Username"})
+    else:
+      return render(request,'home/forgotpassword.html',{})
 
 def home(request):
     return render(request,'home/homepage.html',{})
