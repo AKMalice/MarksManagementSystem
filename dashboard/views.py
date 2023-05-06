@@ -290,4 +290,31 @@ def student_dashboard(request):
     pass
 
 def faculty_dashboard(request):
-    pass
+    if request.session.has_key('user') and request.session['user'] == 'faculty':
+        return render(request,'dashboard/faculty_dash.html')
+    else:
+        return redirect('/login')
+
+def faculty_classes(request):
+    if request.session.has_key('user') and request.session['user'] == 'faculty':
+        return render(request,'dashboard/faculty-classes.html')
+    else :
+        return redirect('/login')
+    
+def faculty_analytics(request):
+    if request.session.has_key('user') and request.session['user'] == 'faculty':
+        return render(request,'dashboard/faculty-analytics.html')
+    else :
+        return redirect('/login')
+    
+def faculty_uploadmarks(request):
+    if request.session.has_key('user') and request.session['user'] == 'faculty':
+        return render(request,'dashboard/faculty-uploadmarks.html')
+    else :
+        return redirect('/login')
+    
+def faculty_profile(request):
+    if request.session.has_key('user') and request.session['user'] == 'faculty':
+        return render(request,'dashboard/faculty-profile.html')
+    else :
+        return redirect('/login')

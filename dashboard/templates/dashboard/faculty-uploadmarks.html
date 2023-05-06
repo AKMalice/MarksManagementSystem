@@ -1,0 +1,124 @@
+{%extends "dash_base.html"%}
+
+{%block content%}
+
+<!--Navbar-->
+<div class=" navbox container rounded mt-3">
+    <nav class="navbar navbar-expand-lg row">
+      <div class="container-fluid">
+        <a class="navbar-brand text-light col text-uppercase display-5 p-2" href="">{{uni_name}}</a>
+        <button class="navbar-toggler btn-outline-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav col">
+            <li class="nav-item px-2">
+              <a class="nav-link text-light text-uppercase"  href="/dashboard">Dashboard</a>
+            </li>
+            <li class="nav-item px-2">
+              <a class="nav-link text-light text-uppercase" href="{% url 'faculty-analytics' %}">Analytics</a>
+            </li>
+            <li class="nav-item px-2">
+              <a class="nav-link text-light text-uppercase" href="{% url 'faculty-classes' %}">Classes</a>
+            </li>
+            <li class="nav-item px-2">
+              <a class="nav-link text-light text-uppercase" href="{% url 'faculty-uploadmarks' %}">Upload Marks</a>
+            </li>
+            
+            <li class="nav-item px-2">
+              <a class="nav-link text-light text-uppercase" href="{% url 'faculty-profile' %}">Profile</a>
+            </li>
+          </ul>
+          <a class="btn btn-outline-light btn-sm " href="{%url 'logout'%}">
+            Logout
+          </a>
+        </div>
+      </div>
+    </nav>
+    </div>
+
+{% if success != None%}
+<div class="alert alert-info alert-dismissible mt-3 container">
+  <a href="/students" class="close text-decoration-none text-dark p-2" data-dismiss="alert" aria-label="close">&times;</a>
+  <strong>{{success}}</strong>
+</div>
+{%endif%}
+
+{% if error != None%}
+<div class="alert alert-danger alert-dismissible mt-3 container">
+  <a href="/students" class="close text-decoration-none text-dark p-2" data-dismiss="alert" aria-label="close">&times;</a>
+  <strong>{{error}}</strong> 
+</div>
+{%endif%}
+
+<!--Drop down list-->
+<form action = "" method = "POST">
+    {% csrf_token %}
+<div class="container mt-5">
+    <div class="row ">
+      <div class="col-4">
+       <div class="p-3 border rounded shadow">
+        
+        
+  
+       </div>
+      </div>
+      <div class="col">
+        <div class="px-5 border rounded shadow  ">
+          <div class="row my-3 ">
+            <h4 class="fw-light text-center text-uppercase">Uplaod marks</h4>
+            <div class="row auto">
+
+           <div class="col-4 mt-2 mb-2">
+            <input class="form-control px-3 mb-2" type="text" placeholder="Student ID" name = "student_id"></input>
+            <input class="form-control px-3" type="text" placeholder="Section ID" name = "student_username"></input>
+           </div>
+
+           <div class="col-4 mt-2">
+            <input class="form-control px-3 mb-2" type="text" placeholder="Marks" name = "name"></input>
+            <input class="form-control   px-3" type="text" placeholder="Course code" name = "password"></input>
+           </div>
+
+           <div class="col-4 mt-2">
+            <input class="form-control px-3 mb-2" type="email" placeholder="Total Marks" name = "email"></input>
+            <button class="col-12 btn btn-dark " type="submit"> Add </button>
+           </div>
+
+        </div>
+          </div>
+        
+        </div>
+      </div>
+    </div>
+  </div>
+  </form>
+
+
+  <div class="container mt-4 mb-1">
+    <div class="border rounded shadow px-4 py-3">
+      <div class="row">
+        <h5 class="col-2 fw-bold text-uppercase"> Course code</h5>
+          <h5 class="col-2 fw-bold text-uppercase"> Student ID</h5>
+          <h5 class="col-2 fw-bold text-uppercase"> Name</h5>
+          <h5 class="col-2 fw-bold text-uppercase"> Marks</h5>
+          <h5 class="col-2 fw-bold text-uppercase"> Total Marks</h5>
+      </div>
+    </div>
+  </div>
+
+
+<!--List of Marks-->
+{%for student in studentList%}
+<div class="container mt-3 mb-3">
+  <div class="border rounded shadow px-4 py-3">
+    <div class="row">
+        <h5 class="col-2 fw-light"> {{student.student_id}}</h5>
+        <h5 class="col-2 fw-light"> {{student.name}}</h5>
+        <h5 class="col-2 fw-light"> {{student.email}}</h5>
+        <a class="col-2 offset-4 btn  btn-outline-dark" href="students/{{student.student_id}}">Details</a>
+    </div>
+  </div>
+</div>
+{%endfor%}
+
+{%endblock%}

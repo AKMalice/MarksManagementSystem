@@ -13,22 +13,20 @@
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <ul class="navbar-nav col">
         <li class="nav-item px-2">
-          <a class="nav-link text-light text-uppercase" href="/dashboard">Dashboard</a>
+          <a class="nav-link text-light text-uppercase"  href="/dashboard">Dashboard</a>
         </li>
         <li class="nav-item px-2">
-          <a class="nav-link text-light text-uppercase" href="">Analytics</a>
+          <a class="nav-link text-light text-uppercase" href="{% url 'faculty-analytics' %}">Analytics</a>
         </li>
         <li class="nav-item px-2">
-          <a class="nav-link text-light text-uppercase" href="{% url 'faculty' %}" onmouseover=" ">Faculty</a>
+          <a class="nav-link text-light text-uppercase" href="{% url 'faculty-classes' %}">Classes</a>
         </li>
         <li class="nav-item px-2">
-          <a class="nav-link text-light text-uppercase" href="{% url 'students' %}">Students</a>
+          <a class="nav-link text-light text-uppercase" href="{% url 'faculty-uploadmarks' %}">Upload Marks</a>
         </li>
+        
         <li class="nav-item px-2">
-          <a class="nav-link text-light text-uppercase" href="{% url 'issues' %}">Issues</a>
-        </li>
-        <li class="nav-item px-2">
-          <a class="nav-link text-light text-uppercase" href="">View Marks</a>
+          <a class="nav-link text-light text-uppercase" href="{% url 'faculty-profile' %}">Profile</a>
         </li>
       </ul>
       <a class="btn btn-outline-light btn-sm " href="{%url 'logout'%}">
@@ -56,17 +54,17 @@
 <form action = "" method = "POST">
   {% csrf_token %}
 
-<!--Raised Issues & Announcement Form-->
+<!-- Recent Activity & Announcement Form -->
 <div class="container mt-5">
   <div class="row ">
     <div class="col">
      <div class="p-5 border rounded shadow">
       <div class=" row ">
-        <h1 class="col display-6">Issues Raised</h1>
+       
         <h1 class="col display-6">Recent Activity</h1>
       </div>
       <div class="row mb-1">
-        <h1 class=" col display-2">{{issueCount}}</h1>
+       
         <h1 class=" col display-2">---</h1>
       </div>
 
@@ -94,7 +92,7 @@
 {%for announcement in announcementList%}
 <div class="container mt-4 mb-3">
   <div class="border rounded shadow px-4 py-3">
-    <h5 class="text-left  text-uppercase"> {{uni_name}} Admin</h5>
+    <h5 class="text-left  text-uppercase"> {{uni_name}} Faculty</h5>
     <hr />
     <h3>{{announcement.note}}</h3>
     <p class="fw-light">{{announcement.time}}</p>

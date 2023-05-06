@@ -30,9 +30,15 @@ urlpatterns = [
     path('faculty/<slug:id>',dashboardviews.admin_faculty_details,name="faculty-details"),
     path('faculty/<slug:id>/delete/<slug:section>',dashboardviews.admin_faculty_details_delete,name="delete-section"),
     path('students',dashboardviews.admin_students,name="students"),
+    path('forgotpassword',homeviews.forgotpassword,name="forgotpassword"),
+    path('faculty/classes',dashboardviews.faculty_classes,name="faculty-classes"),
+    path('analytics',dashboardviews.faculty_analytics,name="faculty-analytics"),
+    path('uploadmarks',dashboardviews.faculty_uploadmarks,name="faculty-uploadmarks"),
+    path('faculty/profile',dashboardviews.faculty_profile,name="faculty-profile"),
     path('students/<slug:id>',dashboardviews.admin_student_details,name="student-details"),
     path('issues',dashboardviews.admin_issues,name="issues"),
     path('issues/<slug:student_id>/<int:issue_id>',dashboardviews.admin_issue_details,name="issue-details"),
     path('issues/<slug:student_id>/<int:issue_id>/resolved',dashboardviews.admin_issue_resolved,name="issue-resolved"),
     path('issues/<slug:student_id>/<int:issue_id>/dismissed',dashboardviews.admin_issue_dismissed,name="issue-dismissed"),
+    path('')
 ]   
