@@ -1,10 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.db.models import Q
-from dashboard.models import Admin
-from dashboard.models import Student
+from dashboard.models import Admin,Faculty,Student
 from django.shortcuts import redirect
 from dashboard.views import dashboard
+from home.models import UserList
 import bcrypt
 from django.core.mail import send_mail
 from password_generator import PasswordGenerator
@@ -13,12 +13,26 @@ from password_generator import PasswordGenerator
 def forgotpassword(request):
     if request.method == "POST":
         data = request.POST
-        queryset = Student.objects.filter(Q(username=data.get("username")))
+        queryset = UserList.objects.filter(Q(username=data.get("username")))
         if len(queryset) == 1:
-            emailAdd = queryset[0].email;
-            password = "1234"
-            user = queryset[0];
-            curusername = user.username
+            user = queryset[0]
+            emailAdd = None
+            curusername = None
+            if(user.user_type == "admin"):
+                user_query = Admin.objects.filter(Q(username = user.username))
+                emailAdd = user_query[0].email;
+                curusername = user_query[0].username;
+            
+            if(user.user_type == "student"):
+                user_query = Student.objects.filter(Q(username = user.username))
+                emailAdd = user_query[0].email;
+                curusername = user_query[0].username;
+            
+            if(user.user_type == "faculty"):
+                user_query = Faculty.objects.filter(Q(username = user.username))
+                emailAdd = user_query[0].email;
+                curusername = user_query[0].username;
+            
             pwo = PasswordGenerator()
             pwo.excludeschars = "[$&+,:;=#|'<>.-^*()%!]" 
             newPassword=pwo.generate()
@@ -29,7 +43,15 @@ def forgotpassword(request):
             [emailAdd],
             fail_silently=False,
             )
-            Student.objects.filter(username = curusername).update(password = newPassword)
+            if(user.user_type == "student"):
+             Student.objects.filter(username = curusername).update(password = newPassword)
+            
+            if(user.user_type == "faculty"):
+                Faculty.objects.filter(username = curusername).update(password = newPassword)
+            
+            if(user.user_type == "admin"):
+                Admin.objects.filter(username = curusername).update(password = newPassword)
+
             return render(request,'home/forgotpassword.html',{"success" : "Email has been sent"})
         else:
             return render(request,'home/forgotpassword.html',{"error": "Invalid Username"})
@@ -42,15 +64,41 @@ def home(request):
 def login(request):
     if request.method == "POST":
         data = request.POST
-        queryset = Admin.objects.filter(Q(username=data.get("username")))
+        queryset = UserList.objects.filter(Q(username=data.get("username")))
         if len(queryset) == 1:
-            if queryset[0].password == data.get("password"):
-                request.session['username'] = queryset[0].username
-                request.session['uni_name'] = queryset[0].uni_name
-                request.session['user']='admin'
-                return redirect(dashboard)
-            else:
-                return render(request,'home/login.html',{"error": "Invalid Password"})
+
+            if queryset[0].user_type == "admin":
+                user = Admin.objects.filter(Q(username=data.get("username")))
+                if user[0].password == data.get("password"):
+                    request.session['username'] = user[0].username
+                    request.session['uni_name'] = user[0].uni_name
+                    request.session['user']='admin'
+                    return redirect(dashboard)
+                else:
+                    return render(request,'home/login.html',{"error": "Invalid Password"})
+
+            elif queryset[0].user_type == "faculty":
+                user = Faculty.objects.filter(Q(username=data.get("username")))
+                uni_name = Admin.objects.filter(Q(username=user[0].admin_username))[0].uni_name
+                if user[0].password == data.get("password"):
+                    request.session['username'] = user[0].username
+                    request.session['uni_name'] = uni_name
+                    request.session['user']='faculty'
+                    return redirect(dashboard)
+                else:
+                    return render(request,'home/login.html',{"error": "Invalid Password"})
+
+            elif queryset[0].user_type == "student":
+                user = Student.objects.filter(Q(username=data.get("username")))
+                uni_name = Admin.objects.filter(Q(username=user[0].admin_username))[0].uni_name
+                if user[0].password == data.get("password"):
+                    request.session['username'] = user[0].username
+                    request.session['uni_name'] = uni_name
+                    request.session['user']='student'
+                    return redirect(dashboard)
+                else:
+                    return render(request,'home/login.html',{"error": "Invalid Password"})
+
         else:
             return render(request,'home/login.html',{"error": "Invalid Username"})
 
@@ -75,6 +123,9 @@ def signup(request):
         newAdmin.username = data.get("username")
         newAdmin.email = data.get("email")
         newAdmin.password = data.get("password")
+        newUser = UserList()
+        newUser.username = data.get("username")
+        newUser.user_type="admin"
         # bytes = password.encode('utf-8')
         # salt = bcrypt.gensalt()
         # hashpass = bcrypt.hashpw(bytes, salt)
@@ -82,8 +133,10 @@ def signup(request):
         # newAdmin.password = hashpass
         try:
             newAdmin.save()
+            newUser.save()
             return render(request,'home/login.html',{"registered":"Successfuly Registered"})
         except Exception as e:
+            Admin.objects.filter(Q(username=data.get("username"))).delete()
             e = str(e)
             if "uni_name" in e:
                 return render(request,'home/signup.html',{'error':": University Name Already Exists"})

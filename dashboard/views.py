@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
-from dashboard.models import Announcement,Faculty,Section,Student,Classe
+from dashboard.models import *
+from home.models import *
 from django.core.mail import send_mail
 from django.db.models import Q
 
@@ -22,7 +23,6 @@ def logout(request):
     except:
         return redirect('/login')
 
-
 def admin_dashboard(request):
     if request.method == "POST":
         data = request.POST
@@ -34,14 +34,17 @@ def admin_dashboard(request):
         try:
             newAnnouncement.save()
             announcementList = Announcement.objects.filter(Q(admin_username=request.session['username']))
-            return render(request,'dashboard/admin_dash.html',{"uni_name" : request.session['uni_name'], "success" : "Announcement Sent Sucessfully", "announcementList":reversed(announcementList) if len(announcementList)>0 else None})
+            issueList = Issue.objects.filter(Q(admin_username=request.session['username']) & Q(status="pending"))
+            return render(request,'dashboard/admin_dash.html',{"uni_name" : request.session['uni_name'], "success" : "Announcement Sent Sucessfully", "announcementList":reversed(announcementList) if len(announcementList)>0 else None,"issueCount":len(issueList)})
         except:
             announcementList = Announcement.objects.filter(Q(admin_username=request.session['username']))
-            return render(request,'dashboard/admin_dash.html',{"uni_name" : request.session['uni_name'],"error" : "Failed To Send Announcement", "announcementList":reversed(announcementList) if len(announcementList)>0 else None})
+            issueList = Issue.objects.filter(Q(admin_username=request.session['username']) & Q(status="pending"))
+            return render(request,'dashboard/admin_dash.html',{"uni_name" : request.session['uni_name'],"error" : "Failed To Send Announcement", "announcementList":reversed(announcementList) if len(announcementList)>0 else None,"issueCount":len(issueList)})
 
-    elif request.session.has_key('username'):
+    elif request.session.has_key('user') and request.session['user'] == 'admin':
         announcementList = Announcement.objects.filter(Q(admin_username=request.session['username']))
-        return render(request,'dashboard/admin_dash.html',{"uni_name" : request.session['uni_name'], "announcementList":reversed(announcementList) if len(announcementList)>0 else None})
+        issueList = Issue.objects.filter(Q(admin_username=request.session['username']) & Q(status="pending"))
+        return render(request,'dashboard/admin_dash.html',{"uni_name" : request.session['uni_name'], "announcementList":reversed(announcementList) if len(announcementList)>0 else None,"issueCount":len(issueList)})
     else:
         return redirect('/login')
 
@@ -58,18 +61,26 @@ def admin_faculty(request):
         newFaculty.username = data.get('teacher_username')
         newFaculty.password = data.get('password')
 
+        newUser = UserList()
+        newUser.username = data.get('teacher_username')
+        newUser.user_type = 'faculty'
+
         try:
             newFaculty.save()
             send_mail(
                 'NOVA Invitation',
-                'You Have Been Invited To Join NOVA You Can Login Using the Following Credentials :\n '+'Username : '+newFaculty.username+'\n'+'Password : '+newFaculty.password,
+                'You Have Been Invited To Join NOVA You Can Login Using the Following Credentials :\n '+'Username : '+newFaculty.username+'\n'+'Password : '+newFaculty.password+'\nLogin Here : https://akmalice.pythonanywhere.com/login',
                 'novamarks123@gmail.com',
                 [newFaculty.email],
                  fail_silently=False,
             )
+            newUser.save()
+
             facultyList = Faculty.objects.filter(Q(admin_username=request.session['username']))
             return render(request,'dashboard/admin_faculty.html',{"uni_name" : request.session['uni_name'] , "success" : "Faculty Added Successfully","facultyList" : facultyList,"facultyListLength" : len(facultyList),"courseCount" : courseCount})
+
         except Exception as e:
+            Faculty.objects.filter(Q(admin_username=request.session['username']) & Q(teacher_id=newFaculty.teacher_id)).delete()
             e = str(e)
             if "email" in e:
                 facultyList = Faculty.objects.filter(Q(admin_username=request.session['username']))
@@ -124,7 +135,6 @@ def admin_faculty_details(request,id):
     else:
         return redirect('/login')
 
-
 def admin_faculty_details_delete(request,id,section):
     if request.session.has_key('user') and request.session['user'] == 'admin':
         try:
@@ -148,18 +158,26 @@ def admin_students(request):
         newStudent.username = data.get('student_username')
         newStudent.password = data.get('password')
 
+        newUser = UserList()
+        newUser.username = data.get('student_username')
+        newUser.user_type = 'student'
+
         try:
             newStudent.save()
             send_mail(
                 'NOVA Invitation',
-                'You Have Been Invited To Join NOVA You Can Login Using the Following Credentials :\n '+'Username : '+newStudent.username+'\n'+'Password : '+newStudent.password,
+                'You Have Been Invited To Join NOVA You Can Login Using the Following Credentials :\n '+'Username : '+newStudent.username+'\n'+'Password : '+newStudent.password+'\nLogin Here : https://akmalice.pythonanywhere.com/login',
                 'novamarks123@gmail.com',
                 [newStudent.email],
                  fail_silently=False,
             )
+            newUser.save()
+
             studentList = Student.objects.filter(Q(admin_username=request.session['username']))
             return render(request,'dashboard/admin_students.html',{"uni_name" : request.session['uni_name'] , "success" : "Student Added Successfully","studentList" : studentList,"studentListLength" : len(studentList),"courseCount" : courseCount})
+            
         except Exception as e:
+            Student.objects.filter(Q(admin_username=request.session['username']) & Q(student_id=newStudent.student_id)).delete()
             e = str(e)
             if "email" in e:
                 studentList = Student.objects.filter(Q(admin_username=request.session['username']))
@@ -168,6 +186,7 @@ def admin_students(request):
                 studentList = Student.objects.filter(Q(admin_username=request.session['username']))
                 return render(request,'dashboard/admin_students.html',{"uni_name" : request.session['uni_name'] , "error" : "Username Must Be Unique" ,"studentList" : studentList,"studentListLength" : len(studentList),"courseCount" : courseCount})
             else:
+                print(e)
                 studentList = Student.objects.filter(Q(admin_username=request.session['username']))
                 return render(request,'dashboard/admin_students.html',{"uni_name" : request.session['uni_name'] , "error" : "Something Went Wrong" ,"studentList" : studentList,"studentListLength" : len(studentList),"courseCount" : courseCount})
 
@@ -230,10 +249,45 @@ def admin_student_details(request,id):
     else:
         return redirect('/login')
 
+def admin_issues(request):
+    if request.session.has_key('user') and request.session['user'] == 'admin':
+        issueList = Issue.objects.filter(Q(admin_username=request.session['username']) & Q(status="pending"))
+        return render(request,'dashboard/admin_issues.html',{"uni_name" : request.session['uni_name'] ,"issueList" : issueList})
+    else :
+        return redirect('/login')
+
+def admin_issue_details(request,student_id,issue_id):
+    if request.session.has_key('user') and request.session['user'] == 'admin':
+        studentDetails = Student.objects.filter(Q(admin_username=request.session['username']) & Q(student_id=student_id))
+        studentDetails = studentDetails[0]
+        issueDetails = Issue.objects.filter(Q(admin_username=request.session['username']) & Q(pk=issue_id))
+        issueDetails = issueDetails[0]
+        return render(request,'dashboard/admin_issues_student_details.html',{"uni_name" : request.session['uni_name'],"studentDetails" : studentDetails,"issueDetails" : issueDetails})
+    else :
+        return redirect('/login')
+
+def admin_issue_resolved(request,student_id,issue_id):
+    if request.session.has_key('user') and request.session['user'] == 'admin':
+        try:
+            Issue.objects.filter(Q(admin_username=request.session['username']) & Q(pk=issue_id)).update(status="resolved")
+            return redirect('issues')
+        except:
+            return redirect('issues')
+    else:
+        return redirect('/login')
+
+def admin_issue_dismissed(request,student_id,issue_id):
+    if request.session.has_key('user') and request.session['user'] == 'admin':
+        try:
+            Issue.objects.filter(Q(admin_username=request.session['username']) & Q(pk=issue_id)).update(status="dismissed")
+            return redirect('issues')
+        except:
+            return redirect('issues')
+    else:
+        return redirect('/login')
 
 def student_dashboard(request):
     pass
-
 
 def faculty_dashboard(request):
     pass

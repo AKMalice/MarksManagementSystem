@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.timezone import now
 
 class Admin (models.Model):
     uni_name = models.fields.CharField(max_length=100,unique = True)
@@ -48,4 +49,11 @@ class Classe(models.Model):
 class Announcement (models.Model):
     admin_username = models.fields.CharField(max_length=50)
     note = models.fields.TextField(max_length=1000)
-    time = models.DateTimeField(auto_now_add=True)
+    time = models.DateTimeField(default=now)
+
+class Issue(models.Model):
+    admin_username = models.fields.CharField(max_length=50)
+    student_id = models.fields.CharField(max_length=50)
+    issue = models.fields.TextField(max_length=1000)
+    time = models.DateTimeField(default=now)
+    status = models.fields.TextField(default="pending")

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from dashboard.models import Admin,Announcement,Faculty,Course,Section,Student,Classe
+from dashboard.models import Admin,Announcement,Faculty,Course,Section,Student,Classe,Issue
 
 
 class DisplayAdmins(admin.ModelAdmin):
@@ -29,6 +29,9 @@ class DisplaySection(admin.ModelAdmin):
 class DisplayClasses(admin.ModelAdmin):
     list_display = ('admin_username','section_id','student_id','year')
 
+class DisplayIssues(admin.ModelAdmin):
+    list_display = ('admin_username','student_id','issue','time','status')
+
 admin.site.register(Admin,DisplayAdmins)
 admin.site.register(Announcement,DisplayAnnouncements)
 admin.site.register(Faculty,DisplayFaculty)
@@ -36,3 +39,4 @@ admin.site.register(Course,DisplayCourse)
 admin.site.register(Section,DisplaySection)
 admin.site.register(Student,DisplayStudent)
 admin.site.register(Classe,DisplayClasses)
+admin.site.register(Issue,DisplayIssues)
