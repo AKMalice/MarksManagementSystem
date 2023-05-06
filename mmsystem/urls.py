@@ -31,6 +31,7 @@ urlpatterns = [
     path('faculty/<slug:id>/delete/<slug:section>',dashboardviews.admin_faculty_details_delete,name="delete-section"),
     path('students',dashboardviews.admin_students,name="students"),
     path('faculty-classes',dashboardviews.faculty_classes,name="faculty-classes"),
+    path('forgotpassword',homeviews.forgotpassword,name="forgotpassword"),
     path('analytics',dashboardviews.faculty_analytics,name="faculty-analytics"),
     path('uploadmarks',dashboardviews.faculty_uploadmarks,name="faculty-uploadmarks"),
     path('faculty-profile',dashboardviews.faculty_profile,name="faculty-profile"),

@@ -6,6 +6,57 @@ from django.shortcuts import redirect
 from dashboard.views import dashboard
 from home.models import UserList
 import bcrypt
+from django.core.mail import send_mail
+from password_generator import PasswordGenerator
+
+
+def forgotpassword(request):
+    if request.method == "POST":
+        data = request.POST
+        queryset = UserList.objects.filter(Q(username=data.get("username")))
+        if len(queryset) == 1:
+            user = queryset[0]
+            emailAdd = None
+            curusername = None
+            if(user.user_type == "admin"):
+                user_query = Admin.objects.filter(Q(username = user.username))
+                emailAdd = user_query[0].email;
+                curusername = user_query[0].username;
+            
+            if(user.user_type == "student"):
+                user_query = Student.objects.filter(Q(username = user.username))
+                emailAdd = user_query[0].email;
+                curusername = user_query[0].username;
+            
+            if(user.user_type == "faculty"):
+                user_query = Faculty.objects.filter(Q(username = user.username))
+                emailAdd = user_query[0].email;
+                curusername = user_query[0].username;
+            
+            pwo = PasswordGenerator()
+            pwo.excludeschars = "[$&+,:;=#|'<>.-^*()%!]" 
+            newPassword=pwo.generate()
+            send_mail(
+            'NOVA RESET PASSWORD',
+            'Here is your new password to NOVA Marks Management System \n' + 'Username : ' + user.username + '\n' + 'New password : ' + newPassword +'\n' + 'Login here : ' + 'https://akmalice.pythonanywhere.com/login',                      
+            'novamarks123@gmail.com',
+            [emailAdd],
+            fail_silently=False,
+            )
+            if(user.user_type == "student"):
+             Student.objects.filter(username = curusername).update(password = newPassword)
+            
+            if(user.user_type == "faculty"):
+                Faculty.objects.filter(username = curusername).update(password = newPassword)
+            
+            if(user.user_type == "admin"):
+                Admin.objects.filter(username = curusername).update(password = newPassword)
+
+            return render(request,'home/forgotpassword.html',{"success" : "Email has been sent"})
+        else:
+            return render(request,'home/forgotpassword.html',{"error": "Invalid Username"})
+    else:
+      return render(request,'home/forgotpassword.html',{})
 
 def home(request):
     return render(request,'home/homepage.html',{})
