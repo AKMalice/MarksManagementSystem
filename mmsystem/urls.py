@@ -29,5 +29,10 @@ urlpatterns = [
     path('faculty',dashboardviews.admin_faculty,name="faculty"),
     path('faculty/<int:id>',dashboardviews.admin_faculty_details,name="faculty-details"),
     path('faculty/<int:id>/delete/<slug:section>',dashboardviews.admin_faculty_details_delete,name="delete-section"),
-    path('students',dashboardviews.admin_students,name="students")
+    path('students',dashboardviews.admin_students,name="students"),
+    path('students/<int:id>',dashboardviews.admin_student_details,name="student-details"),
+    path('faculty/classes',dashboardviews.faculty_classes,name="faculty-classes"),
+    path('analytics',dashboardviews.faculty_analytics,name="faculty-analytics"),
+    path('uploadmarks',dashboardviews.faculty_uploadmarks,name="faculty-uploadmarks"),
+    path('faculty/profile',dashboardviews.faculty_profile,name="faculty-profile"),
 ]

@@ -7,7 +7,7 @@
     <nav class="navbar navbar-expand-lg row">
       <div class="container-fluid">
         <a class="navbar-brand text-light col text-uppercase display-5 p-2" href="">{{uni_name}}</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler btn-outline-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
@@ -16,19 +16,17 @@
               <a class="nav-link text-light text-uppercase"  href="/dashboard">Dashboard</a>
             </li>
             <li class="nav-item px-2">
-              <a class="nav-link text-light text-uppercase" href="">Analytics</a>
+              <a class="nav-link text-light text-uppercase" href="{% url 'faculty-analytics' %}">Analytics</a>
             </li>
             <li class="nav-item px-2">
-              <a class="nav-link text-light text-uppercase" href="{% url 'faculty' %}">Faculty</a>
+              <a class="nav-link text-light text-uppercase" href="{% url 'faculty-classes' %}">Classes</a>
             </li>
             <li class="nav-item px-2">
-              <a class="nav-link text-light text-uppercase" href="{% url 'students' %}">Students</a>
+              <a class="nav-link text-light text-uppercase" href="{% url 'faculty-uploadmarks' %}">Upload Marks</a>
             </li>
+            
             <li class="nav-item px-2">
-              <a class="nav-link text-light text-uppercase" href="">Issues</a>
-            </li>
-            <li class="nav-item px-2">
-              <a class="nav-link text-light text-uppercase" href="">View Marks</a>
+              <a class="nav-link text-light text-uppercase" href="{% url 'faculty-profile' %}">Profile</a>
             </li>
           </ul>
           <a class="btn btn-outline-light btn-sm " href="{%url 'logout'%}">
@@ -53,42 +51,36 @@
 </div>
 {%endif%}
 
-<!--Student Count & Add Students Form-->
+<!--Drop down list-->
 <form action = "" method = "POST">
     {% csrf_token %}
 <div class="container mt-5">
     <div class="row ">
       <div class="col-4">
        <div class="p-3 border rounded shadow">
-        <div class=" row ">
-          <h3 class="col fw-light">Student Count</h3>
-          <h3 class="col fw-light">Course Count</h3>
-        </div>
-        <div class="row">
-          <h1 class=" col display-2">{{studentListLength}}</h1>
-          <h1 class=" col display-2">{{courseCount}}</h1>
-        </div>
+        
+        
   
        </div>
       </div>
       <div class="col">
         <div class="px-5 border rounded shadow  ">
           <div class="row my-3 ">
-            <h4 class="fw-light text-center text-uppercase">Add Students</h4>
+            <h4 class="fw-light text-center text-uppercase">Uplaod marks</h4>
             <div class="row auto">
 
            <div class="col-4 mt-2 mb-2">
             <input class="form-control px-3 mb-2" type="text" placeholder="Student ID" name = "student_id"></input>
-            <input class="form-control px-3" type="text" placeholder="Username" name = "student_username"></input>
+            <input class="form-control px-3" type="text" placeholder="Section ID" name = "student_username"></input>
            </div>
 
            <div class="col-4 mt-2">
-            <input class="form-control px-3 mb-2" type="text" placeholder="Name" name = "name"></input>
-            <input class="form-control   px-3" type="text" placeholder="Password" name = "password"></input>
+            <input class="form-control px-3 mb-2" type="text" placeholder="Marks" name = "name"></input>
+            <input class="form-control   px-3" type="text" placeholder="Course code" name = "password"></input>
            </div>
 
            <div class="col-4 mt-2">
-            <input class="form-control px-3 mb-2" type="email" placeholder="Email" name = "email"></input>
+            <input class="form-control px-3 mb-2" type="email" placeholder="Total Marks" name = "email"></input>
             <button class="col-12 btn btn-dark " type="submit"> Add </button>
            </div>
 
@@ -105,15 +97,17 @@
   <div class="container mt-4 mb-1">
     <div class="border rounded shadow px-4 py-3">
       <div class="row">
+        <h5 class="col-2 fw-bold text-uppercase"> Course code</h5>
           <h5 class="col-2 fw-bold text-uppercase"> Student ID</h5>
           <h5 class="col-2 fw-bold text-uppercase"> Name</h5>
-          <h5 class="col-2 fw-bold text-uppercase"> Email</h5>
+          <h5 class="col-2 fw-bold text-uppercase"> Marks</h5>
+          <h5 class="col-2 fw-bold text-uppercase"> Total Marks</h5>
       </div>
     </div>
   </div>
 
 
-<!--List of Students-->
+<!--List of Marks-->
 {%for student in studentList%}
 <div class="container mt-3 mb-3">
   <div class="border rounded shadow px-4 py-3">

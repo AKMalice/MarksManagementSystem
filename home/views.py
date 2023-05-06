@@ -4,6 +4,7 @@ from django.db.models import Q
 from dashboard.models import Admin
 from django.shortcuts import redirect
 from dashboard.views import dashboard
+import bcrypt
 
 def home(request):
     return render(request,'home/homepage.html',{})
@@ -34,12 +35,21 @@ def signup(request):
             return render(request,'home/signup.html',{'error':": Passwords Do Not Match"})
         if len(data.get("password")) <6:
             return render(request,'home/signup.html',{'error':": Password Length Must Be More Than 6 Characters"})
+        if data.get("password").lower() == data.get("password"):
+            return render(request,'home/signup.html',{'error':": Password Must Contain At Least One Uppercase Character"})
+        if (data.get("password").isalnum()):
+            return render(request,'home/signup.html',{'error':": Password Must Contain At Least One Special Character"})
         
         newAdmin = Admin()
         newAdmin.uni_name = data.get("university_name")
         newAdmin.username = data.get("username")
         newAdmin.email = data.get("email")
         newAdmin.password = data.get("password")
+        # bytes = password.encode('utf-8')
+        # salt = bcrypt.gensalt()
+        # hashpass = bcrypt.hashpw(bytes, salt)
+        # print(hashpass)
+        # newAdmin.password = hashpass
         try:
             newAdmin.save()
             return render(request,'home/login.html',{"registered":"Successfuly Registered"})

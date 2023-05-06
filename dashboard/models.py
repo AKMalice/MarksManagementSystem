@@ -36,6 +36,14 @@ class Section(models.Model):
     section_id = models.fields.CharField(max_length=75)
     section_name = models.fields.CharField(max_length=25)
     year = models.fields.CharField(max_length=4)
+    active = models.fields.BooleanField(default=True)
+
+
+class Classe(models.Model):
+    admin_username = models.fields.CharField(max_length=50)
+    section_id = models.fields.CharField(max_length=75)
+    student_id = models.fields.CharField(max_length=50)
+    year = models.fields.CharField(max_length=4)
 
 class Announcement (models.Model):
     admin_username = models.fields.CharField(max_length=50)
