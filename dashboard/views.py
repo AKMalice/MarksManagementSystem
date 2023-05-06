@@ -290,7 +290,10 @@ def student_dashboard(request):
     pass
 
 def faculty_dashboard(request):
-    pass
+    if request.session.has_key('user') and request.session['user'] == 'faculty':
+        return render(request,'dashboard/faculty_dash.html')
+    else :
+        return redirect('/login')
 
 def faculty_classes(request):
     if request.session.has_key('user') and request.session['user'] == 'faculty':
