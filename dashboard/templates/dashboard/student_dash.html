@@ -1,0 +1,109 @@
+{%extends "dash_base.html"%}
+
+{%block content%}
+
+<!--Navbar-->
+<div class=" navbox container rounded mt-3">
+    <nav class="navbar navbar-expand-lg row">
+      <div class="container-fluid">
+        <a class="navbar-brand text-light col text-uppercase display-5 p-2" href="">{{uni_name}}</a>
+        <button class="navbar-toggler btn-outline-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav col">
+            <li class="nav-item px-2">
+              <a class="nav-link text-light text-uppercase"  href="/dashboard">Dashboard</a>
+            </li>
+            <li class="nav-item px-2">
+              <a class="nav-link text-light text-uppercase" href="{% url 'student-analytics' %}">Analytics</a>
+            </li>
+            <li class="nav-item px-2">
+              <a class="nav-link text-light text-uppercase" href="{% url 'student-classes' %}">Classes</a>
+            </li>
+            <li class="nav-item px-2">
+              <a class="nav-link text-light text-uppercase" href="{% url 'student-viewmarks' %}">View Marks</a>
+            </li>
+            
+            <li class="nav-item px-2">
+              <a class="nav-link text-light text-uppercase" href="{% url 'student-profile' %}">Profile</a>
+            </li>
+          </ul>
+          <a class="btn btn-outline-light btn-sm " href="{%url 'logout'%}">
+            Logout
+          </a>
+        </div>
+      </div>
+    </nav>
+    </div>
+
+<form action = "" method = "POST">
+  {% csrf_token %}
+
+<!-- Recent Activity & Announcement Form -->
+<div class="container mt-5">
+  <div class="row ">
+    <div class="col">
+     <div class="px-5 py-3 border rounded shadow">
+
+      <div class=" row ">
+        <h1 class="col display-5">Course Count</h1>
+        <h1 class="col display-5">Section Count</h1>
+        <h1 class="col display-5">Student Count</h1>
+      </div>
+      <div class="row">
+        <h1 class=" col display-2">{{courseCount}}</h1>
+        <h1 class=" col display-2">{{sectionCount}}</h1>
+        <h1 class=" col display-2">{{studentCount}}</h1>
+      </div>
+
+     </div>
+    </div>
+    <div class="col-4">
+      <div class="p-5 border rounded shadow ">
+
+        <div class="row">
+        <h1 class="col display-6">Recent Activity</h1>
+      </div>
+      <div class="row mb-1">
+       
+        <h1 class=" col display-2">---</h1>
+      </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+</form>
+
+<!--List of Announcements-->
+{% if announcementList %}
+  <div class="container mt-4 mb-3">
+    <div class="border rounded shadow px-4 py-3">
+      <h5 class="text-center text-uppercase">---------------- &nbsp; Announcements &nbsp; ----------------</h5>
+    </div>
+  </div>
+  {%for announcement in announcementList%}
+  <div class="container mt-4 mb-3">
+    <div class="border rounded shadow px-4 py-3">
+      <h5 class="text-left  text-uppercase"> {{uni_name}} Faculty</h5>
+      <hr />
+      <h3>{{announcement.note}}</h3>
+      <p class="fw-light">{{announcement.time}}</p>
+    </div>
+  </div>
+  {%endfor%}
+
+{% else %}
+  <div class="container mt-4 mb-3">
+    <div class="border rounded shadow px-4 py-3">
+      <h5 class="text-center fw-light  text-uppercase"> No Recent Announcements</h5>
+    </div>
+  </div>
+
+{%endif%}
+
+
+
+{%endblock%}

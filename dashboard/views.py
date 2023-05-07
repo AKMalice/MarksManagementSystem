@@ -335,6 +335,34 @@ def faculty_profile(request):
         return render(request,'dashboard/faculty-profile.html',{"uni_name" : request.session['uni_name'],"facultyDetails" : facultyDetails})
     else :
         return redirect('/login')
-
+    
 def student_dashboard(request):
-    pass
+
+    if request.session.has_key('user') and request.session['user'] == 'student':
+        return render(request,'dashboard/student_dash.html')
+    else :
+        return redirect('/login')
+
+def student_classes(request):
+    if request.session.has_key('user') and request.session['user'] == 'student':
+        return render(request,'dashboard/student-classes.html')
+    else :
+        return redirect('/login')
+    
+def student_analytics(request):
+    if request.session.has_key('user') and request.session['user'] == 'student':
+        return render(request,'dashboard/student-analytics.html')
+    else :
+        return redirect('/login')
+    
+def student_viewmarks(request):
+    if request.session.has_key('user') and request.session['user'] == 'student':
+        return render(request,'dashboard/student-viewmarks.html')
+    else :
+        return redirect('/login')
+
+def student_profile(request):
+    if request.session.has_key('user') and request.session['user'] == 'student':
+        return render(request,'dashboard/student-profile.html')    
+    else :
+        return redirect('/login')

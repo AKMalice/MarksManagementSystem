@@ -1,0 +1,89 @@
+{%extends "dash_base.html"%}
+
+{%block content%}
+
+<!--Navbar-->
+<div class=" navbox container rounded mt-3">
+    <nav class="navbar navbar-expand-lg row">
+      <div class="container-fluid">
+        <a class="navbar-brand text-light col text-uppercase display-5 p-2" href="">{{uni_name}}</a>
+        <button class="navbar-toggler btn-outline-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav col">
+            <li class="nav-item px-2">
+              <a class="nav-link text-light text-uppercase"  href="/dashboard">Dashboard</a>
+            </li>
+            <li class="nav-item px-2">
+              <a class="nav-link text-light text-uppercase" href="{% url 'student-analytics' %}">Analytics</a>
+            </li>
+            <li class="nav-item px-2">
+              <a class="nav-link text-light text-uppercase" href="{% url 'student-classes' %}">Classes</a>
+            </li>
+            <li class="nav-item px-2">
+              <a class="nav-link text-light text-uppercase" href="{% url 'student-viewmarks' %}">View Marks</a>
+            </li>
+            
+            <li class="nav-item px-2">
+              <a class="nav-link text-light text-uppercase" href="{% url 'student-profile' %}">Profile</a>
+            </li>
+          </ul>
+          <a class="btn btn-outline-light btn-sm " href="{%url 'logout'%}">
+            Logout
+          </a>
+        </div>
+      </div>
+    </nav>
+    </div>
+
+
+
+<!--Class Details-->
+<div class="container mt-5">
+    <div class="row ">
+       <div class="p-3 border rounded shadow">
+            
+            <div class="display-6 text-center fw-light">CLASS DETAILS</div>
+
+       </div>
+    </div>
+</div>
+
+
+<div class="container mt-4 mb-1">
+    <div class="border rounded shadow px-4 py-3">
+      <div class="row text-center">
+          <h5 class="col-2  text-uppercase"> Course ID</h5>
+          <h5 class="col-4  text-uppercase"> Course Name</h5>
+          <h5 class="col-2  text-uppercase"> Section</h5>
+          <h5 class="col-2  text-uppercase"> Year</h5>
+          <h5 class="col-2  text-uppercase"> Active</h5>
+      </div>
+    </div>
+  </div>
+
+
+<!--List of Sections-->
+
+{%for class in classList%}
+<div class="container mt-3 mb-3">
+  <div class="border rounded shadow px-4 py-3">
+    <div class="row text-center">
+        <h5 class="col-2 fw-light"> {{class.course_id}}</h5>
+        <h5 class="col-4 fw-light"> {{class.course_name}}</h5>
+        <h5 class="col-2 fw-light"> {{class.section_name}}</h5>
+        <h5 class="col-2 fw-light"> {{class.year}}</h5>
+        {% if class.active == True %}
+        <h5 class="col-2 fw-light text-success"> Yes</h5>
+        {%else%}
+        <h5 class="col-2 fw-light text-danger"> No</h5>
+        {%endif%}
+    </div>
+  </div>
+</div>
+{%endfor%}
+     
+
+
+{%endblock%}
