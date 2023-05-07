@@ -18,6 +18,7 @@ from django.urls import path
 
 from home import views as homeviews
 from dashboard import views as dashboardviews
+from analytics import views as analyticsviews
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,20 +26,22 @@ urlpatterns = [
     path('login',homeviews.login,name="login"),
     path('signup',homeviews.signup,name="signup"),
     path('dashboard',dashboardviews.dashboard,name="dash"),
+    path('admin-profile',dashboardviews.admin_profile,name="admin-profile"),
     path('logout',dashboardviews.logout,name="logout"),
     path('faculty',dashboardviews.admin_faculty,name="faculty"),
     path('faculty/<slug:id>',dashboardviews.admin_faculty_details,name="faculty-details"),
     path('faculty/<slug:id>/delete/<slug:section>',dashboardviews.admin_faculty_details_delete,name="delete-section"),
     path('students',dashboardviews.admin_students,name="students"),
     path('forgotpassword',homeviews.forgotpassword,name="forgotpassword"),
-    path('faculty/classes',dashboardviews.faculty_classes,name="faculty-classes"),
-    path('analytics',dashboardviews.faculty_analytics,name="faculty-analytics"),
-    path('uploadmarks',dashboardviews.faculty_uploadmarks,name="faculty-uploadmarks"),
-    path('faculty/profile',dashboardviews.faculty_profile,name="faculty-profile"),
+    path('faculty-classes',dashboardviews.faculty_classes,name="faculty-classes"),
+    path('faculty-analytics',analyticsviews.faculty_analytics,name="faculty-analytics"),
+    path('admin-analytics',analyticsviews.admin_analytics,name="admin-analytics"),
+    path('admin-marks',analyticsviews.admin_marks,name="admin-marks"),
+    path('uploadmarks',analyticsviews.faculty_uploadmarks,name="faculty-uploadmarks"),
+    path('faculty-profile',dashboardviews.faculty_profile,name="faculty-profile"),
     path('students/<slug:id>',dashboardviews.admin_student_details,name="student-details"),
     path('issues',dashboardviews.admin_issues,name="issues"),
     path('issues/<slug:student_id>/<int:issue_id>',dashboardviews.admin_issue_details,name="issue-details"),
     path('issues/<slug:student_id>/<int:issue_id>/resolved',dashboardviews.admin_issue_resolved,name="issue-resolved"),
     path('issues/<slug:student_id>/<int:issue_id>/dismissed',dashboardviews.admin_issue_dismissed,name="issue-dismissed"),
-    path('')
 ]   

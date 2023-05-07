@@ -37,20 +37,6 @@
 </nav>
 </div>
 
-{% if success != None%}
-<div class="alert alert-info alert-dismissible mt-3 container">
-  <a href="/dashboard" class="close text-decoration-none text-dark p-2" data-dismiss="alert" aria-label="close">&times;</a>
-  <strong>{{success}}</strong>
-</div>
-{%endif%}
-
-{% if error != None%}
-<div class="alert alert-danger alert-dismissible mt-3 container">
-  <a href="/dashboard" class="close text-decoration-none text-dark p-2" data-dismiss="alert" aria-label="close">&times;</a>
-  <strong>{{error}}</strong> 
-</div>
-{%endif%}
-
 <form action = "" method = "POST">
   {% csrf_token %}
 
@@ -58,9 +44,25 @@
 <div class="container mt-5">
   <div class="row ">
     <div class="col">
-     <div class="p-5 border rounded shadow">
+     <div class="px-5 py-3 border rounded shadow">
+
       <div class=" row ">
-       
+        <h1 class="col display-5">Course Count</h1>
+        <h1 class="col display-5">Section Count</h1>
+        <h1 class="col display-5">Student Count</h1>
+      </div>
+      <div class="row">
+        <h1 class=" col display-2">{{courseCount}}</h1>
+        <h1 class=" col display-2">{{sectionCount}}</h1>
+        <h1 class=" col display-2">{{studentCount}}</h1>
+      </div>
+
+     </div>
+    </div>
+    <div class="col-4">
+      <div class="p-5 border rounded shadow ">
+
+        <div class="row">
         <h1 class="col display-6">Recent Activity</h1>
       </div>
       <div class="row mb-1">
@@ -68,17 +70,6 @@
         <h1 class=" col display-2">---</h1>
       </div>
 
-     </div>
-    </div>
-    <div class="col">
-      <div class="px-5 border rounded shadow ">
-
-        <div class="row mt-4 ">
-          <textarea class="form-control mt-2 " id="textArea" rows="5" placeholder="Make An Announcement ..." name = "note"></textarea>
-        </div>
-        <div class="mt-2 mb-2 col-8 offset-2 d-grid text-center">
-            <button class="btn btn btn-dark m-3" type="submit">Send</button>
-        </div>
       </div>
     </div>
   </div>
@@ -88,24 +79,28 @@
 
 <!--List of Announcements-->
 {% if announcementList %}
-
-{%for announcement in announcementList%}
-<div class="container mt-4 mb-3">
-  <div class="border rounded shadow px-4 py-3">
-    <h5 class="text-left  text-uppercase"> {{uni_name}} Faculty</h5>
-    <hr />
-    <h3>{{announcement.note}}</h3>
-    <p class="fw-light">{{announcement.time}}</p>
+  <div class="container mt-4 mb-3">
+    <div class="border rounded shadow px-4 py-3">
+      <h5 class="text-center fw-light  text-uppercase">----------- &nbsp; Announcements &nbsp; -----------</h5>
+    </div>
   </div>
-</div>
-{%endfor%}
+  {%for announcement in announcementList%}
+  <div class="container mt-4 mb-3">
+    <div class="border rounded shadow px-4 py-3">
+      <h5 class="text-left  text-uppercase"> {{uni_name}} Faculty</h5>
+      <hr />
+      <h3>{{announcement.note}}</h3>
+      <p class="fw-light">{{announcement.time}}</p>
+    </div>
+  </div>
+  {%endfor%}
 
 {% else %}
-<div class="container mt-4 mb-3">
-  <div class="border rounded shadow px-4 py-3">
-    <h5 class="text-center fw-light  text-uppercase"> No Recent Announcements</h5>
+  <div class="container mt-4 mb-3">
+    <div class="border rounded shadow px-4 py-3">
+      <h5 class="text-center fw-light  text-uppercase"> No Recent Announcements</h5>
+    </div>
   </div>
-</div>
 
 {%endif%}
 

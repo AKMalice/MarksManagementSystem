@@ -33,18 +33,26 @@ def admin_dashboard(request):
 
         try:
             newAnnouncement.save()
-            announcementList = Announcement.objects.filter(Q(admin_username=request.session['username']))
+            announcementList = Announcement.objects.filter(Q(admin_username=request.session['username'])).order_by('-time')
             issueList = Issue.objects.filter(Q(admin_username=request.session['username']) & Q(status="pending"))
             return render(request,'dashboard/admin_dash.html',{"uni_name" : request.session['uni_name'], "success" : "Announcement Sent Sucessfully", "announcementList":reversed(announcementList) if len(announcementList)>0 else None,"issueCount":len(issueList)})
         except:
-            announcementList = Announcement.objects.filter(Q(admin_username=request.session['username']))
+            announcementList = Announcement.objects.filter(Q(admin_username=request.session['username'])).order_by('-time')
             issueList = Issue.objects.filter(Q(admin_username=request.session['username']) & Q(status="pending"))
             return render(request,'dashboard/admin_dash.html',{"uni_name" : request.session['uni_name'],"error" : "Failed To Send Announcement", "announcementList":reversed(announcementList) if len(announcementList)>0 else None,"issueCount":len(issueList)})
 
     elif request.session.has_key('user') and request.session['user'] == 'admin':
-        announcementList = Announcement.objects.filter(Q(admin_username=request.session['username']))
+        announcementList = Announcement.objects.filter(Q(admin_username=request.session['username'])).order_by('-time')
         issueList = Issue.objects.filter(Q(admin_username=request.session['username']) & Q(status="pending"))
         return render(request,'dashboard/admin_dash.html',{"uni_name" : request.session['uni_name'], "announcementList":reversed(announcementList) if len(announcementList)>0 else None,"issueCount":len(issueList)})
+    else:
+        return redirect('/login')
+
+def admin_profile(request):
+    if request.session.has_key('user') and request.session['user'] == 'admin':
+        adminDetails = Admin.objects.filter(Q(username=request.session['username']))
+        adminDetails = adminDetails[0]
+        return render(request,'dashboard/admin_profile.html',{"uni_name" : request.session['uni_name'],"adminDetails":adminDetails})
     else:
         return redirect('/login')
 
@@ -286,35 +294,47 @@ def admin_issue_dismissed(request,student_id,issue_id):
     else:
         return redirect('/login')
 
-def student_dashboard(request):
-    pass
-
 def faculty_dashboard(request):
     if request.session.has_key('user') and request.session['user'] == 'faculty':
-        return render(request,'dashboard/faculty_dash.html')
+
+        facultyDetails = Faculty.objects.filter(Q(username=request.session['username']))
+        facultyDetails = facultyDetails[0]
+
+        announcementList = Announcement.objects.filter(Q(admin_username=facultyDetails.admin_username)).order_by('-time')
+
+        sectionList = Section.objects.filter(Q(admin_username=facultyDetails.admin_username) & Q(teacher_id=facultyDetails.teacher_id) & Q(active=True))
+        courseCount = sectionList.values('course_id').distinct().count()
+        sectionCount = len(sectionList)
+        studentCount = 0
+        for section in sectionList:
+            studentCount += Section.objects.filter(Q(admin_username=facultyDetails.admin_username) & Q(section_id=section.section_id) & Q(active=True)).count()
+
+        return render(request,'dashboard/faculty_dash.html',{"uni_name" : request.session['uni_name'],"announcementList" : announcementList,"sectionCount" : sectionCount,"courseCount" : courseCount,"studentCount" : studentCount})
     else:
         return redirect('/login')
 
 def faculty_classes(request):
+    print(request.session['user'])
     if request.session.has_key('user') and request.session['user'] == 'faculty':
-        return render(request,'dashboard/faculty-classes.html')
-    else :
-        return redirect('/login')
-    
-def faculty_analytics(request):
-    if request.session.has_key('user') and request.session['user'] == 'faculty':
-        return render(request,'dashboard/faculty-analytics.html')
-    else :
-        return redirect('/login')
-    
-def faculty_uploadmarks(request):
-    if request.session.has_key('user') and request.session['user'] == 'faculty':
-        return render(request,'dashboard/faculty-uploadmarks.html')
+        
+        facultyDetails = Faculty.objects.filter(Q(username=request.session['username']))
+        facultyDetails = facultyDetails[0]
+
+        classList = Section.objects.filter(Q(admin_username=facultyDetails.admin_username) & Q(teacher_id=facultyDetails.teacher_id)).order_by('-active')
+
+        return render(request,'dashboard/faculty-classes.html',{"uni_name" : request.session['uni_name'],"classList" : classList})
     else :
         return redirect('/login')
     
 def faculty_profile(request):
     if request.session.has_key('user') and request.session['user'] == 'faculty':
-        return render(request,'dashboard/faculty-profile.html')
+
+        facultyDetails = Faculty.objects.filter(Q(username=request.session['username']))
+        facultyDetails = facultyDetails[0]
+
+        return render(request,'dashboard/faculty-profile.html',{"uni_name" : request.session['uni_name'],"facultyDetails" : facultyDetails})
     else :
         return redirect('/login')
+
+def student_dashboard(request):
+    pass

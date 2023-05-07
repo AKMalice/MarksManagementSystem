@@ -16,7 +16,7 @@
           <a class="nav-link text-light text-uppercase" href="/dashboard">Dashboard</a>
         </li>
         <li class="nav-item px-2">
-          <a class="nav-link text-light text-uppercase" href="">Analytics</a>
+          <a class="nav-link text-light text-uppercase" href="{% url 'admin-analytics' %}">Analytics</a>
         </li>
         <li class="nav-item px-2">
           <a class="nav-link text-light text-uppercase" href="{% url 'faculty' %}" onmouseover=" ">Faculty</a>
@@ -28,7 +28,10 @@
           <a class="nav-link text-light text-uppercase" href="{% url 'issues' %}">Issues</a>
         </li>
         <li class="nav-item px-2">
-          <a class="nav-link text-light text-uppercase" href="">View Marks</a>
+          <a class="nav-link text-light text-uppercase" href="{% url 'admin-marks' %}">View Marks</a>
+        </li>
+        <li class="nav-item px-2">
+          <a class="nav-link text-light text-uppercase" href="{% url 'admin-profile' %}">Profile</a>
         </li>
       </ul>
       <a class="btn btn-outline-light btn-sm " href="{%url 'logout'%}">
