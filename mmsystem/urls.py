@@ -32,7 +32,7 @@ urlpatterns = [
     path('students',dashboardviews.admin_students,name="students"),
     path('faculty-classes',dashboardviews.faculty_classes,name="faculty-classes"),
     path('forgotpassword',homeviews.forgotpassword,name="forgotpassword"),
-    path('analytics',dashboardviews.faculty_analytics,name="faculty-analytics"),
+    path('faculty-analytics',dashboardviews.faculty_analytics,name="faculty-analytics"),
     path('uploadmarks',dashboardviews.faculty_uploadmarks,name="faculty-uploadmarks"),
     path('faculty-profile',dashboardviews.faculty_profile,name="faculty-profile"),
     path('students/<slug:id>',dashboardviews.admin_student_details,name="student-details"),
@@ -40,4 +40,8 @@ urlpatterns = [
     path('issues/<slug:student_id>/<int:issue_id>',dashboardviews.admin_issue_details,name="issue-details"),
     path('issues/<slug:student_id>/<int:issue_id>/resolved',dashboardviews.admin_issue_resolved,name="issue-resolved"),
     path('issues/<slug:student_id>/<int:issue_id>/dismissed',dashboardviews.admin_issue_dismissed,name="issue-dismissed"),
+    path('student-classes',dashboardviews.student_classes,name="student-classes"),
+    path('student-analytics',dashboardviews.student_analytics,name="student-analytics"),
+    path('student-profile',dashboardviews.student_profile,name="student-profile"),
+    path('viewmarks',dashboardviews.student_viewmarks,name="student-viewmarks"),
 ]   

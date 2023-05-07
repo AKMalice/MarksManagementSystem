@@ -1,0 +1,68 @@
+{%extends "dash_base.html"%}
+
+{%block content%}
+
+<!--Navbar-->
+<div class=" navbox container rounded mt-3">
+    <nav class="navbar navbar-expand-lg row">
+      <div class="container-fluid">
+        <a class="navbar-brand text-light col text-uppercase display-5 p-2" href="">{{uni_name}}</a>
+        <button class="navbar-toggler btn-outline-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav col">
+            <li class="nav-item px-2">
+              <a class="nav-link text-light text-uppercase"  href="/dashboard">Dashboard</a>
+            </li>
+            <li class="nav-item px-2">
+              <a class="nav-link text-light text-uppercase" href="{% url 'student-analytics' %}">Analytics</a>
+            </li>
+            <li class="nav-item px-2">
+              <a class="nav-link text-light text-uppercase" href="{% url 'student-classes' %}">Classes</a>
+            </li>
+            <li class="nav-item px-2">
+              <a class="nav-link text-light text-uppercase" href="{% url 'student-viewmarks' %}">View Marks</a>
+            </li>
+            
+            <li class="nav-item px-2">
+              <a class="nav-link text-light text-uppercase" href="{% url 'student-profile' %}">Profile</a>
+            </li>
+          </ul>
+          <a class="btn btn-outline-light btn-sm " href="{%url 'logout'%}">
+            Logout
+          </a>
+        </div>
+      </div>
+    </nav>
+    </div>
+
+{% if success != None%}
+<div class="alert alert-info alert-dismissible mt-3 container">
+  <a href="" class="close text-decoration-none text-dark p-2" data-dismiss="alert" aria-label="close">&times;</a>
+  <strong>{{success}}</strong>
+</div>
+{%endif%}
+
+{% if error != None%}
+<div class="alert alert-danger alert-dismissible mt-3 container">
+  <a href="" class="close text-decoration-none text-dark p-2" data-dismiss="alert" aria-label="close">&times;</a>
+  <strong>{{error}}</strong> 
+</div>
+{%endif%}
+
+<!--Student Details-->
+<div class="container mt-5">
+    <div class="row ">
+       <div class="p-3 border rounded shadow">
+            
+            <div class="display-6 text-center fw-light">View Marks Coming soon</div>
+            
+            
+            
+
+       </div>
+    </div>
+</div>
+
+{%endblock%}

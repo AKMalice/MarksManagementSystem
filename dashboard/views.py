@@ -286,8 +286,6 @@ def admin_issue_dismissed(request,student_id,issue_id):
     else:
         return redirect('/login')
 
-def student_dashboard(request):
-    pass
 
 def faculty_dashboard(request):
     if request.session.has_key('user') and request.session['user'] == 'faculty':
@@ -316,5 +314,36 @@ def faculty_uploadmarks(request):
 def faculty_profile(request):
     if request.session.has_key('user') and request.session['user'] == 'faculty':
         return render(request,'dashboard/faculty-profile.html')
+    else :
+        return redirect('/login')
+    
+def student_dashboard(request):
+
+    if request.session.has_key('user') and request.session['user'] == 'student':
+        return render(request,'dashboard/student_dash.html')
+    else :
+        return redirect('/login')
+
+def student_classes(request):
+    if request.session.has_key('user') and request.session['user'] == 'student':
+        return render(request,'dashboard/student-classes.html')
+    else :
+        return redirect('/login')
+    
+def student_analytics(request):
+    if request.session.has_key('user') and request.session['user'] == 'student':
+        return render(request,'dashboard/student-analytics.html')
+    else :
+        return redirect('/login')
+    
+def student_viewmarks(request):
+    if request.session.has_key('user') and request.session['user'] == 'student':
+        return render(request,'dashboard/student-viewmarks.html')
+    else :
+        return redirect('/login')
+
+def student_profile(request):
+    if request.session.has_key('user') and request.session['user'] == 'student':
+        return render(request,'dashboard/student-profile.html')    
     else :
         return redirect('/login')
