@@ -40,69 +40,57 @@
     </nav>
     </div>
 
-<form action = "" method = "POST">
-  {% csrf_token %}
 
-<!-- Recent Activity & Course Count -->
+
+
 <div class="container mt-4">
   <div class="row ">
-    <div class="col">
-     <div class="px-5 py-3 border rounded shadow">
-
-      <div class=" row ">
-        <h1 class="col display-5">Course Count</h1>
-      </div>
-      <div class="row mb-1">
-        <h1 class="col display-2">{{courseCount}}</h1>
-      </div>
+     <div class="p-3 border rounded shadow">
+          
+          <div class="display-6 text-center fw-light">{{course_name}}</div>
 
      </div>
-    </div>
-    <div class="col-8">
-      <div class="p-3 border rounded shadow ">
-
-        <div class="row">
-        <h1 class="offset-1 col display-5">Recent Activity</h1>
-      </div>
-      <div class="row mb-1">
-       
-        <h1 class="offset-1 col display-2">---</h1>
-      </div>
-
-      </div>
-    </div>
   </div>
 </div>
 
-</form>
-
-<!--List of Announcements-->
-{% if announcementList %}
-  <div class="container mt-4 mb-3">
-    <div class="border rounded shadow px-4 py-3">
-      <h5 class="text-center text-uppercase">---------------- &nbsp; Announcements &nbsp; ----------------</h5>
+{%if resultCount == 0%}
+<div class="container mt-3 mb-3">
+  <div class="border rounded shadow px-4 py-3">
+    <div class="row text-center">
+        <h5 class="col fw-light"> No Results Yet</h5>
     </div>
   </div>
-  {%for announcement in announcementList%}
-  <div class="container mt-4 mb-3">
-    <div class="border rounded shadow px-4 py-3">
-      <h5 class="text-left  text-uppercase"> {{uni_name}} Admin</h5>
-      <hr />
-      <h3>{{announcement.note}}</h3>
-      <p class="fw-light">{{announcement.time}}</p>
+  </div>
+{%else%}
+<div class="container mt-3 mb-3">
+  <div class="border rounded shadow px-4 py-3">
+    <div class="row text-center">
+        <h5 class="col "> Exam</h5>
+        <h5 class="col "> Max Marks</h5>
+        <h5 class="col "> Pass Marks</h5>
+        <h5 class="col "> Marks Obained</h5>
+        <h5 class="col "> Result</h5>
     </div>
+  </div>
+  </div>
+{%for result in resultList%}
+<div class="container mt-3 mb-3">
+  <div class="border rounded shadow px-4 py-3">
+    <div class="row text-center">
+        <h5 class="col fw-light"> {{result.exam_name}}</h5>
+        <h5 class="col fw-light"> {{result.max_marks}}</h5>
+        <h5 class="col fw-light"> {{result.pass_marks}}</h5>
+        {%if result.passed%}
+        <h5 class="col fw-light text-success"> {{result.marks}}</h5>
+        <h5 class="col fw-light text-success"> PASS</h5>
+        {%else%}
+        <h5 class="col fw-light text-danger"> {{result.marks}}</h5>
+        <h5 class="col fw-light text-danger"> FAIL</h5>
+        {%endif%}
+    </div>
+  </div>
   </div>
   {%endfor%}
-
-{% else %}
-  <div class="container mt-4 mb-3">
-    <div class="border rounded shadow px-4 py-3">
-      <h5 class="text-center fw-light  text-uppercase"> No Recent Announcements</h5>
-    </div>
-  </div>
-
-{%endif%}
-
-
+  {%endif%}
 
 {%endblock%}

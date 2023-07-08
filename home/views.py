@@ -4,7 +4,7 @@ from django.db.models import Q
 from dashboard.models import Admin,Faculty,Student
 from django.shortcuts import redirect
 from dashboard.views import dashboard
-from home.models import UserList
+from home.models import *
 import bcrypt
 from django.core.mail import send_mail
 from password_generator import PasswordGenerator
@@ -13,6 +13,10 @@ from password_generator import PasswordGenerator
 def forgotpassword(request):
     if request.method == "POST":
         data = request.POST
+
+        if data.get("username") in ["guestadmin","guestfaculty","gueststudent"]:
+            return render(request,'home/forgotpassword.html',{"error": "Modifications Are Not Supported On Guest Account"})
+
         queryset = UserList.objects.filter(Q(username=data.get("username")))
         if len(queryset) == 1:
             user = queryset[0]
@@ -39,7 +43,7 @@ def forgotpassword(request):
             send_mail(
             'NOVA RESET PASSWORD',
             'Here is your new password to NOVA Marks Management System \n' + 'Username : ' + user.username + '\n' + 'New password : ' + newPassword +'\n' + 'Login here : ' + 'https://akmalice.pythonanywhere.com/login',                      
-            'novamarks123@gmail.com',
+            'novamarksmanagement@gmail.com',
             [emailAdd],
             fail_silently=False,
             )
@@ -149,3 +153,44 @@ def signup(request):
 
     else:
         return render(request,'home/signup.html',{'error': None})
+
+def reset_password(request,token):
+    if request.method == "POST":
+
+        tokenDetails = PassToken.objects.filter(Q(token=token))[0]
+
+        if tokenDetails.username in ["guestadmin","guestfaculty","gueststudent"]:
+            return render(request,'home/reset_password.html',{"expired": "Modifications Are Not Supported On Guest Account"})
+
+    
+        if request.POST['password1']!=request.POST['password2']:
+            return render(request,'home/reset_password.html',{"error":"Passwords Do Not Match"})
+        elif len(request.POST['password1']) <6:
+            return render(request,'home/reset_password.html',{"error":"Password Length Must Be More Than 6 Characters"})
+        elif request.POST['password1'].lower() == request.POST['password1']:
+            return render(request,'home/reset_password.html',{"error":"Password Must Contain At Least One Uppercase Character"})
+        elif request.POST['password1'].isalnum():
+            return render(request,'home/reset_password.html',{"error":"Password Must Contain At Least One Special Character"})
+        
+        if tokenDetails.user_type == "admin":
+            user = Admin.objects.filter(Q(username=tokenDetails.username))[0]
+            user.password = request.POST['password1']
+            user.save()
+        elif tokenDetails.user_type == "faculty":
+            user = Faculty.objects.filter(Q(username=tokenDetails.username))[0]
+            user.password = request.POST['password1']
+            user.save()
+        elif tokenDetails.user_type == "student":
+            user = Student.objects.filter(Q(username=tokenDetails.username))[0]
+            user.password = request.POST['password1']
+            user.save()
+
+        PassToken.objects.filter(Q(token=token)).delete()
+        return render(request,'home/reset_password.html',{"success":"Password Reset Successfully"})
+
+    else:
+        tokenDetails = PassToken.objects.filter(Q(token=token))
+        if len(tokenDetails) == 1:
+            return render(request,'home/reset_password.html',{})
+        else:
+            return render(request,'home/reset_password.html',{"expired": "Your Token Has Expired"})

@@ -24,10 +24,13 @@
             <li class="nav-item px-2">
               <a class="nav-link text-light text-uppercase" href="{% url 'student-viewmarks' %}">View Marks</a>
             </li>
-            
+            <li class="nav-item px-2">
+              <a class="nav-link text-light text-uppercase" href="{% url 'raise-issue' %}">Raise Issue</a>
+            </li>
             <li class="nav-item px-2">
               <a class="nav-link text-light text-uppercase" href="{% url 'student-profile' %}">Profile</a>
             </li>
+            
           </ul>
           <a class="btn btn-outline-light btn-sm " href="{%url 'logout'%}">
             Logout
@@ -37,13 +40,6 @@
     </nav>
     </div>
 
-{% if success != None%}
-<div class="alert alert-info alert-dismissible mt-3 container">
-  <a href="" class="close text-decoration-none text-dark p-2" data-dismiss="alert" aria-label="close">&times;</a>
-  <strong>{{success}}</strong>
-</div>
-{%endif%}
-
 {% if error != None%}
 <div class="alert alert-danger alert-dismissible mt-3 container">
   <a href="" class="close text-decoration-none text-dark p-2" data-dismiss="alert" aria-label="close">&times;</a>
@@ -51,18 +47,39 @@
 </div>
 {%endif%}
 
-<!--Student Details-->
-<div class="container mt-5">
+<!--Analytics-->
+<div class="container mt-4">
     <div class="row ">
        <div class="p-3 border rounded shadow">
             
-            <div class="display-6 text-center fw-light">Analytics Coming soon</div>
-            
-            
-            
-
+            <div class="display-6 text-center fw-light">ANALYTICS</div>
+        
        </div>
     </div>
 </div>
+
+<!--Select Year-->
+<form action="" method="POST" >
+  {%csrf_token%}
+<div class="container mt-3">
+     <div class="p-3 border rounded shadow">
+      <div class="row">
+          
+          <div class="col-3 h4 text-center fw-light">Select Year</div>
+          <select class="col form-select" aria-label="Default select example" name="year" required>
+            <option selected>Year</option>
+            {%for year in yearList%}
+            <option >{{year}}</option>
+            {%endfor%}
+          </select>
+          <button class="col btn btn-outline-dark mx-4" type="submit">Generate</button>
+      
+     </div>
+     {%if graphic != None%}
+     <img class="mt-3" src="data:image/png;base64,{{ graphic|safe }}" style="width:600px;height:500px;  display:block; margin-left:auto; margin-right:auto;">
+     {%endif%}
+  </div>
+</div>
+</form>
 
 {%endblock%}

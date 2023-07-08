@@ -37,15 +37,120 @@
 </nav>
 </div>
 
+{% if success != None%}
+<div class="alert alert-info alert-dismissible mt-3 container">
+  <a href="" class="close text-decoration-none text-dark p-2" data-dismiss="alert" aria-label="close">&times;</a>
+  <strong>{{success}}</strong>
+</div>
+{%endif%}
 
+{% if error != None%}
+<div class="alert alert-danger alert-dismissible mt-3 container">
+  <a href="" class="close text-decoration-none text-dark p-2" data-dismiss="alert" aria-label="close">&times;</a>
+  <strong>{{error}}</strong> 
+</div>
+{%endif%}
+
+<!--Upload Marks Form-->
+<form action="" method="POST" enctype="multipart/form-data">
+  {%csrf_token%}
 <div class="container mt-4 mb-3">
     <div class="border rounded shadow px-4 py-3">
+
       <div class="row">
-      <h4 class="text-center text-uppercase col">Upload Marks coming soon </h4>
+      <h4 class="text-center text-uppercase col fw-light">Select section & Exam name</h4>
       </div>
+
+      <div class="row mt-3">
+        <div class="col-3">
+          <select class="form-select" aria-label="Default select example" name="course_id" required>
+            <option selected>Course ID</option>
+            {%for course in courseIdList%}
+            <option >{{course}}</option>
+            {%endfor%}
+          </select>
+        </div>
+        <div class="col-3">
+          <select class="form-select" aria-label="Default select example" name="course_name" required>
+            <option selected>Course Name</option>
+            {%for course in courseNameList%}
+            <option >{{course}}</option>
+            {%endfor%}
+          </select>
+        </div>
+        <div class="col-3">
+          <select class="form-select" aria-label="Default select example" name="section" required>
+            <option selected>Section</option>
+            {%for section in sectionList%}
+            <option >{{section}}</option>
+            {%endfor%}
+          </select>
+        </div>
+        <div class="col-3">
+          <select class="form-select" aria-label="Default select example" name="exam_name" required>
+            <option selected>Exam Name</option>
+            {%for exam in examNameList%}
+            <option >{{exam}}</option>
+            {%endfor%}
+          </select>
+        </div>
+      </div>
+
+      <div class="row mt-3 mb-3">
+        <div class="offset-2 col-4">
+            <label for="formFile" class="form-label"> &nbsp; Upload .csv File | Format - [ StudentID  , Marks ]</label>
+            <input class=" form-control" type="file" id="formFile" name="file" required></input>
+        </div>
+        <div class="col-4 mt-4">
+            <button class="col-12 mt-2 btn btn-dark" type="submit">Upload</button>
+        </div>
+      </div>
+
     </div>
   </div>
+</form>
+
+
+<div class="container mt-4 mb-1">
+  <div class="border rounded shadow px-4 py-3">
+    <div class="row">
+      <h5 class="col fw-bold text-uppercase"> Course ID</h5>
+        <h5 class="col fw-bold text-uppercase"> Course Name</h5>
+        <h5 class="col fw-bold text-uppercase"> Section</h5>
+        <h5 class="col fw-bold text-uppercase"> Exam Name</h5>
+        <h5 class="col fw-bold text-uppercase"> File Name</h5>
+        <h5 class="col fw-bold text-uppercase"> Date</h5>
+    </div>
+  </div>
+</div>
+
+
+{%if uploadCount == 0%}
+<div class="container mt-3 mb-3">
+  <div class="border rounded shadow px-4 py-3">
+    <div class="row">
+        <h5 class="col fw-light"> No Uploads Yet</h5>
+    </div>
+  </div>
+  </div>
+{%endif%}
+
+<!--List of Uploads-->
+{%for upload in uploadList%}
+<div class="container mt-3 mb-3">
+<div class="border rounded shadow px-4 py-3">
+  <div class="row">
+    <h5 class="col fw-light"> {{upload.course_id}}</h5>
+      <h5 class="col fw-light"> {{upload.course_name}}</h5>
+      <h5 class="col fw-light"> {{upload.section_name}}</h5>
+      <h5 class="col fw-light"> {{upload.exam_name}}</h5>
+      <h5 class="col fw-light"> {{upload.file_name}}</h5>
+      <h5 class="col fw-light"> {{upload.date}}</h5>
+  </div>
+</div>
+</div>
+{%endfor%}
   
   
-  
-  {%endblock%}
+
+{%endblock%}

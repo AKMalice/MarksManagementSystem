@@ -24,10 +24,13 @@
             <li class="nav-item px-2">
               <a class="nav-link text-light text-uppercase" href="{% url 'student-viewmarks' %}">View Marks</a>
             </li>
-            
+            <li class="nav-item px-2">
+              <a class="nav-link text-light text-uppercase" href="{% url 'raise-issue' %}">Raise Issue</a>
+            </li>
             <li class="nav-item px-2">
               <a class="nav-link text-light text-uppercase" href="{% url 'student-profile' %}">Profile</a>
             </li>
+            
           </ul>
           <a class="btn btn-outline-light btn-sm " href="{%url 'logout'%}">
             Logout
@@ -40,7 +43,7 @@
 
 
 <!--Class Details-->
-<div class="container mt-5">
+<div class="container mt-4">
     <div class="row ">
        <div class="p-3 border rounded shadow">
             
@@ -64,9 +67,9 @@
   </div>
 
 
-<!--List of Sections-->
+<!--List of Classes-->
 
-{%for class in classList%}
+{%for class in sectionList%}
 <div class="container mt-3 mb-3">
   <div class="border rounded shadow px-4 py-3">
     <div class="row text-center">

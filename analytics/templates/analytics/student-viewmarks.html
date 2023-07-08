@@ -24,10 +24,13 @@
             <li class="nav-item px-2">
               <a class="nav-link text-light text-uppercase" href="{% url 'student-viewmarks' %}">View Marks</a>
             </li>
-            
+            <li class="nav-item px-2">
+              <a class="nav-link text-light text-uppercase" href="{% url 'raise-issue' %}">Raise Issue</a>
+            </li>
             <li class="nav-item px-2">
               <a class="nav-link text-light text-uppercase" href="{% url 'student-profile' %}">Profile</a>
             </li>
+            
           </ul>
           <a class="btn btn-outline-light btn-sm " href="{%url 'logout'%}">
             Logout
@@ -37,32 +40,46 @@
     </nav>
     </div>
 
-{% if success != None%}
-<div class="alert alert-info alert-dismissible mt-3 container">
-  <a href="" class="close text-decoration-none text-dark p-2" data-dismiss="alert" aria-label="close">&times;</a>
-  <strong>{{success}}</strong>
+
+
+
+<div class="container mt-4">
+  <div class="row ">
+     <div class="p-3 border rounded shadow">
+          
+          <div class="display-6 text-center fw-light">EXAM RESULTS</div>
+
+     </div>
+  </div>
 </div>
-{%endif%}
 
-{% if error != None%}
-<div class="alert alert-danger alert-dismissible mt-3 container">
-  <a href="" class="close text-decoration-none text-dark p-2" data-dismiss="alert" aria-label="close">&times;</a>
-  <strong>{{error}}</strong> 
-</div>
-{%endif%}
-
-<!--Student Details-->
-<div class="container mt-5">
-    <div class="row ">
-       <div class="p-3 border rounded shadow">
-            
-            <div class="display-6 text-center fw-light">View Marks Coming soon</div>
-            
-            
-            
-
-       </div>
+{%if sectionCount == 0%}
+<div class="container mt-3 mb-3">
+  <div class="border rounded shadow px-4 py-3">
+    <div class="row text-center">
+        <h5 class="col fw-light"> No Classes Yet</h5>
     </div>
+  </div>
+  </div>
+{%endif%}
+
+
+<!--List of Subjects-->
+<form action="" method="POST">
+  {%csrf_token%}
+{%for class in sectionList%}
+<div class="container mt-3 mb-3">
+<div class="border rounded shadow px-4 py-3">
+  <div class="row text-center">
+      <h5 class="col fw-light"> {{class.course_id}}</h5>
+      <h5 class="col-4 fw-light"> {{class.course_name}}</h5>
+      <h5 class="col fw-light"> {{class.section_name}}</h5>
+      <h5 class="col fw-light"> {{class.year}}</h5>
+      <a class="col btn btn-outline-success" href="/viewmarks/{{class.course_id}}">Fetch Results</a>
+  </div>
 </div>
+</div>
+{%endfor%}
+</form>
 
 {%endblock%}

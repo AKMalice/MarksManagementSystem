@@ -1,0 +1,142 @@
+{%extends "dash_base.html"%}
+
+{%block content%}
+
+<!--Navbar-->
+<div class=" navbox container rounded mt-3">
+<nav class="navbar navbar-expand-lg row">
+  <div class="container-fluid">
+    <a class="navbar-brand text-light col text-uppercase display-5 p-2" href="">{{uni_name}}</a>
+    <button class="navbar-toggler btn-outline-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav col">
+        <li class="nav-item px-2">
+          <a class="nav-link text-light text-uppercase"  href="/dashboard">Dashboard</a>
+        </li>
+        <li class="nav-item px-2">
+          <a class="nav-link text-light text-uppercase" href="{% url 'admin-analytics' %}">Analytics</a>
+        </li>
+        <li class="nav-item px-2">
+          <a class="nav-link text-light text-uppercase" href="{% url 'faculty' %}">Faculty</a>
+        </li>
+        <li class="nav-item px-2">
+          <a class="nav-link text-light text-uppercase" href="{% url 'students' %}">Students</a>
+        </li>
+        <li class="nav-item px-2">
+          <a class="nav-link text-light text-uppercase" href="{% url 'issues' %}">Issues</a>
+        </li>
+        <li class="nav-item px-2">
+          <a class="nav-link text-light text-uppercase" href="{% url 'admin-exams' %}">Exams</a>
+        </li>
+        <li class="nav-item px-2">
+            <a class="nav-link text-light text-uppercase" href="{% url 'admin-profile' %}">Profile</a>
+        </li>
+      </ul>
+      <a class="btn btn-outline-light btn-sm " href="{%url 'logout'%}">
+        Logout
+      </a>
+    </div>
+  </div>
+</nav>
+</div>
+
+
+
+{% if success != None%}
+<div class="alert alert-info alert-dismissible mt-3 container">
+  <a href="" class="close text-decoration-none text-dark p-2" data-dismiss="alert" aria-label="close">&times;</a>
+  <strong>{{success}}</strong>
+</div>
+{%endif%}
+
+{% if error != None%}
+<div class="alert alert-danger alert-dismissible mt-3 container">
+  <a href="" class="close text-decoration-none text-dark p-2" data-dismiss="alert" aria-label="close">&times;</a>
+  <strong>{{error}}</strong> 
+</div>
+{%endif%}
+
+<!--Upcoming Exams & Add Exams Form-->
+<form action = "" method = "POST">
+    {% csrf_token %}
+<div class="container mt-5">
+    <div class="row ">
+      <div class="col-4">
+       <div class="p-3 border rounded shadow text-center">
+        <div class=" row ">
+          <h3 class="col fw-light">Upcoming Exams</h3>
+        </div>
+        <div class="row ">
+          <h1 class=" col display-2">{{upcomingExamCount}}</h1>
+        </div>
+  
+       </div>
+      </div>
+      <div class="col">
+        <div class="px-5 border rounded shadow  ">
+          <div class="row my-3 ">
+            <h4 class="fw-light text-center text-uppercase">Add Exam</h4>
+            <div class="row auto">
+
+           <div class="col-4 mt-2 mb-2">
+            <input class="form-control px-3 mb-2" type="text" placeholder="Name" name = "name"></input>
+            <input class="form-control px-3" type="text" placeholder="Course ID" name = "course_id"></input>
+           </div>
+
+           <div class="col-4 mt-2">
+            <input class="form-control px-3 mb-2" type="text" placeholder="Max Marks" name = "max_marks"></input>
+            <input class="form-control   px-3" type="text" placeholder="Pass Marks" name = "pass_marks"></input>
+           </div>
+
+           <div class="col-4 mt-2">
+            <input class="form-control px-3 mb-2" type="date" name = "date"></input>
+            <button class="col-12 btn btn-dark " type="submit"> Add </button>
+           </div>
+
+        </div>
+          </div>
+        
+        </div>
+      </div>
+    </div>
+  </div>
+  </form>
+
+
+  <div class="container mt-4 mb-1">
+    <div class="border rounded shadow px-4 py-3">
+      <div class="row">
+          <h5 class="col fw-bold text-uppercase"> Name</h5>
+          <h5 class="col fw-bold text-uppercase"> Course ID</h5>
+          <h5 class="col fw-bold text-uppercase"> Max Marks</h5>
+          <h5 class="col fw-bold text-uppercase"> Pass Marks</h5>
+          <h5 class="col fw-bold text-uppercase"> Date</h5>
+          <h5 class="col fw-bold text-uppercase"> Status</h5>
+      </div>
+    </div>
+  </div>
+
+
+<!--List of Exams-->
+{%for exam in examList%}
+<div class="container mt-3 mb-3">
+  <div class="border rounded shadow px-4 py-3">
+    <div class="row">
+        <h5 class="col fw-light"> {{exam.name}}</h5>
+        <h5 class="col fw-light"> {{exam.course_id}}</h5>
+        <h5 class="col fw-light"> {{exam.max_marks}}</h5>
+        <h5 class="col fw-light"> {{exam.pass_marks}}</h5>
+        <h5 class="col fw-light"> {{exam.date}}</h5>
+        {%if exam.status == "Upcoming"%}
+        <h5 class="col fw-light text-primary"> {{exam.status}}</h5>
+        {%else%}
+        <h5 class="col fw-light text-success"> {{exam.status}}</h5>
+        {%endif%}
+    </div>
+  </div>
+</div>
+{%endfor%}
+
+{%endblock%}

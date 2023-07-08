@@ -37,8 +37,23 @@
   </nav>
   </div>
 
+{% if success != None%}
+<div class="alert alert-info alert-dismissible mt-3 container">
+  <a href="" class="close text-decoration-none text-dark p-2" data-dismiss="alert" aria-label="close">&times;</a>
+  <strong>{{success}}</strong>
+</div>
+{%endif%}
+
+{% if error != None%}
+<div class="alert alert-danger alert-dismissible mt-3 container">
+  <a href="" class="close text-decoration-none text-dark p-2" data-dismiss="alert" aria-label="close">&times;</a>
+  <strong>{{error}}</strong> 
+</div>
+{%endif%}
 
 <!--Faculty Profile-->
+<form action = "" method = "POST">
+  {% csrf_token %}
 <div class="container mt-5 text-center" style="width: 40rem;">
     <div class="row ">
        <div class="p-3 border rounded shadow">
@@ -49,10 +64,10 @@
             <p class="h2 mt-3 fw-light">Teacher ID : {{facultyDetails.teacher_id}}</p>
             <p class="h2 mt-3 fw-light">Email : {{facultyDetails.email}}</p>
             <hr>
-            <a href="" class="btn btn-sm btn-outline-dark">Change Password</a>
-
+            <button class="btn btn-sm btn-outline-dark" onclick="return confirm('Are you sure?');" type="submit">Change Password</button>
        </div>
     </div>
 </div>
+</form>
 
 {%endblock%}
